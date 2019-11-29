@@ -1,0 +1,12 @@
+{
+    "notifications":[
+        {
+            "id":1,
+            "title":"Welcome to Pexacoin",
+            "message":"Pexacoin mining on \"x16rv2\" is now live! Don't forget to set your minpayout...",
+            "time":"",
+            "type":"success",
+            "icon":"fas fa-thumbs-up"
+        }
+    ]
+}

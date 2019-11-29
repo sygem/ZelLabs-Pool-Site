@@ -1,0 +1,1281 @@
+<script src="/pools/{{=it.coin}}/walletConfig.js"></script>
+<script src="/assets/js/plugins/jquery.dataTables.min.js"></script>
+<script src="/assets/vendor/jquery-knob/jquery.knob.min.js"></script><!-- Jquery Knob Plugin Js -->
+<script>
+$(function () {
+  $('.knob').knob({
+    draw: function () {
+      // "tron" case
+      if (this.$.data('skin') == 'tron') {
+
+          var a = this.angle(this.cv)  // Angle
+              , sa = this.startAngle          // Previous start angle
+              , sat = this.startAngle         // Start angle
+              , ea                            // Previous end angle
+              , eat = sat + a                 // End angle
+              , r = true;
+
+          this.g.lineWidth = this.lineWidth;
+
+          this.o.cursor
+              && (sat = eat - 0.3)
+              && (eat = eat + 0.3);
+
+          if (this.o.displayPrevious) {
+              ea = this.startAngle + this.angle(this.value);
+              this.o.cursor
+                  && (sa = ea - 0.3)
+                  && (ea = ea + 0.3);
+              this.g.beginPath();
+              this.g.strokeStyle = this.previousColor;
+              this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+              this.g.stroke();
+          }
+
+          this.g.beginPath();
+          this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
+          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+          this.g.stroke();
+
+          this.g.lineWidth = 2;
+          this.g.beginPath();
+          this.g.strokeStyle = this.o.fgColor;
+          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+          this.g.stroke();
+
+          return false;
+      }
+  }
+});
+  $(".rtl .knob").knob({
+    draw: function () {
+      //style rtl
+      this.i.css({
+        'margin-right': '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px',
+        'margin-left': 'auto'
+      });
+    },
+  });
+});
+</script>
+
+<div class="container-fluid" style="display: flex; justify-content: flex-start;">
+    <div class="card card-plain">
+<div class="row">
+  <div class="col-xl-6 col-sm-12" id="graphAndBlocks">
+    <div class="card" style="margin-top: 15px"> <!-- Hashrate Graph -->
+      <div class="header" id="hashrateGraphCard">
+        <h2><a class="subheader-text text-custom" href="#" id="subHeaderText"></a></h2>
+        <ul class="header-dropdown dropdown">                                
+            <li><a href="javascript:void(0);" class="full-screen" data-toggle="tooltip" data-title="Full-screen"><i class="zel-icon zel-icon-arrows"></i></a></li>
+        </ul>
+        <!--<div class="btn-group px-2 dropright">
+          <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false" id=dropdownMenuButton>
+            Select Rig
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="rigSelector">
+          </div>
+        </div>-->
+      </div>
+      <div class="card-body" id="hashrateGraph">
+        <div id="chart" style="min-height: 300px;">
+        </div>
+      </div>
+    </div>
+    <div class="card"> <!-- Blocks -->
+      <div class="header">
+        <h2 class="card-title">Latest Blocks</h2>
+        <ul class="header-dropdown dropdown">                                
+          <li><a href="javascript:void(0);" class="full-screen" data-toggle="tooltip" data-title="Full-screen"><i class="zel-icon zel-icon-arrows"></i></a></li>
+        </ul>
+      </div>
+      <div class="table-responsive" id="blocksStats">
+        <table class="table table-hover table-custom spacing5 display nowrap">
+          <thead>
+            <th>Block</th>
+            <th>Mined</th>
+            <th>Diff</th>
+            <th>Effort</th>
+            <th>Luck</th>
+            <th>Confirmations</th>
+            <th></th>
+          </thead>
+          <tbody id="blocksBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-6 col-sm-12" id="statsAndRigs"> <!-- Some Stats -->
+    <div class="row">
+      <div class="col-lg-5 col-md-6 col-sm-12">
+        <div class="card" style="margin-top: 15px;">  <!-- Balance -->
+          <div class="header" id="balanceCard">
+            <h2 class="card-title">Balance</h2>
+            <!--<div class="progress progress-lg mb-10" rel="tooltip" data-placement="right" data-html="true" title="" id='percentShareProgressHolder'>
+              <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id='percentShareProgress'>
+                <span id='percentShareText'></span>
+              </div>
+            </div>-->
+          </div>
+          <div class="body" id="balanceStats">
+            <div id="slider2" class="carousel vert slide" data-ride="carousel" data-interval="5000">
+              <div class="carousel-inner">
+                <div class="carousel-item active text-center">
+                  <h4 class="mb-1 text-custom" id="unconfirmedBalance"></h4>
+                  <div>Unconfirmed</div>
+                </div>
+                <div class="carousel-item text-center">
+                  <h4 class="mb-1 text-custom" id="unpaidBalance"></h4>
+                  <div>Unpaid</div>
+                  <!--<div class="customPayoutProgress" id="customPayoutProgress" rel="tooltip" title=""></div>-->
+                </div>
+                <div class="carousel-item text-center">
+                  <h4 class="mb-1 text-custom" id="totalPaid"></h4>
+                  <div>Total Paid</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-sm-12 col-md-12">
+              <div class="card-wrapper flip-up">
+                <div class="card" style="min-height: 110px;">
+                  <div class="front body w_knob">
+                    <div class="c_know">
+                      <input id="blockPercentageKnob" type="text" class="knob" value="0" data-width="50" data-height="50" data-thickness="0.07" data-bgColor="#383b40" data-fgColor="#f44336">
+                    </div>
+                    <div class="text-center m-t-10">
+                      <h6>Block Contribution</h6>
+                      <h2 class="text-custom" id="percentShareText"></h2>
+                    </div>
+                  </div>
+                  <div class="back p-3 px-4 body bg-success text-center text-light">
+                    <div class="m-t-10">
+                        <h6>
+                          Estimated <span style="text-transform: uppercase;">{{=it.coin}}</span>
+                        </h6>
+                        <h3><span id="estimatedCoins">...</span><i class="zel-icon zel-icon-bag m-l-10"></i></h3>
+                      </div>
+                  </div>
+              </div>
+              </div>
+            </div>
+        </div>
+        <div class="card" data-toggle="tooltip" title="To set a custom payout, use a password like 'minpayout=<NUMBER>' in your miner config file.">  <!-- Balance -->
+          <div class="body">
+            <div id="slider2" class="carousel vert slide" data-ride="carousel" data-interval="5000">
+              <div class="carousel-inner">
+                <div class="carousel-item active text-center">
+                  <div>Min Payout</div>
+                  <h4 class="mb-1 text-custom" id="minPayout"></h4>
+                </div>
+                <div class="carousel-item text-center">
+                  <div>Custom Payout</div>
+                  <h4 class="mb-1 text-custom" id="customPayout"></h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="progress progress-xs" title="" data-delay="500" data-sanitize="false" data-toggle="tooltip" data-html="true" data-placement="bottom" id='customPayoutProgress'>
+              <div class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7 col-md-6 col-sm-12">
+        <div class="card" style="margin-top: 15px;"> <!-- Hashrate -->
+          <div class="header">
+            <h2>Statistics</h2>
+          </div>
+          <div class="body" id="hashrateStats">
+            <ul class="nav nav-tabs3" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" href="#hashrateTable" data-toggle="tab" role="tablist" aria-expanded="true">Hashrate</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#networkTable" data-toggle="tab" role="tablist" aria-expanded="false">Network</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#poolTable" data-toggle="tab" role="tablist" aria-expanded="false">Pool</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="hashrateTable" aria-expanded="true">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>Current Hash</td>
+                      <td><span id="currentHashrate">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>5m average</td>
+                      <td><span id="5mAvgHashrate">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>1h average</td>
+                      <td><span id="1hAvgHashrate">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>3h average</td>
+                      <td><span id="3hAvgHashrate">-</span></td>
+                    </tr>
+                    <!--<tr>
+                      <td>12h average:</td>
+                      <td><p id="12hAvgHashrate"></p></td>
+                    </tr>-->
+                    <tr>
+                      <td>24h average</td>
+                      <td><span id="24hAvgHashrate">-</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="networkTable" aria-expanded="false">
+                <table class="table stats-table">
+                  <tbody>
+                    <tr>
+                      <td>Hashrate</td>
+                      <td><span id="networkHashrate">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>Network Diff</td>
+                      <td><span id="networkDiff">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>Block Height</td>
+                      <td><span id="networkBlockHeight">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>Block Reward</td>
+                      <td><span id="networkBlockReward">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>Connections</td>
+                      <td><span id="networkConnections">-</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="poolTable" aria-expanded="false">
+                <table class="table stats-table">
+                  <tbody>
+                    <tr>
+                      <td>Hashrate</td>
+                      <td><span id="poolHashrate">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>TTF</td>
+                      <td><span id="poolLuck">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>Blocks Found</td>
+                      <td><span id="poolBlocksFound">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>Pool Fee</td>
+                      <td><span id="poolFee">-</span></td>
+                    </tr>
+                    <tr>
+                      <td>Miners / Workers</td>
+                      <td><span id="poolMiners">-</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12"> <!-- Rewards -->
+        <div class="card">
+          <div class="body" id="rewardsStats">
+            <ul class="nav nav-tabs3" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" href="#rewardsTable" data-toggle="tab" role="tablist" aria-expanded="true">Rewards</a>
+              </li>
+              <li class="nav-item" id="walletItem">
+                <a class="nav-link" href="#walletTable" data-toggle="tab" role="tablist" aria-expanded="false">Wallet</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="rewardsTable" aria-expanded="true">
+                <table class="table stats-table">
+                  <thead>
+                    <th>Period</th>
+                    <th id='rewardCoinHeader'></th>
+                    <th>BTC</th>
+                    <th>USD</th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Last hour</td>
+                      <td id="lastHourCoin">0</td>
+                      <td id="lastHourBTC">0</td>
+                      <td id="lastHourUSD">$0</td>
+                    </tr>
+                    <tr>
+                      <td>Last 12 hours</td>
+                      <td id="last12HourCoin">0</td>
+                      <td id="last12HourBTC">0</td>
+                      <td id="last12HourUSD">$0</td>
+                    </tr>
+                    <tr>
+                      <td>Last 24 hours</td>
+                      <td id="last24HourCoin">0</td>
+                      <td id="last24HourBTC">0</td>
+                      <td id="last24HourUSD">$0</td>
+                    </tr>
+                    <tr>
+                      <td>Today</td>
+                      <td id="todayCoin">0</td>
+                      <td id="todayBTC">0</td>
+                      <td id="todayUSD">$0</td>
+                    </tr>
+                    <tr>
+                      <td>Yesterday</td>
+                      <td id="yesterdayCoin">0</td>
+                      <td id="yesterdayBTC">0</td>
+                      <td id="yesterdayUSD">$0</td>
+                    </tr>
+                    <tr>
+                      <td>Last 7 days</td>
+                      <td id="last7DaysCoin">0</td>
+                      <td id="last7DaysBTC">0</td>
+                      <td id="last7DaysUSD">$0</td>
+                    </tr>
+                    <tr>
+                      <td>Last 30 days</td>
+                      <td id="last30DaysCoin">0</td>
+                      <td id="last30DaysBTC">0</td>
+                      <td id="last30DaysUSD">$0</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="walletTable" aria-expanded="true">
+                <div class="row">
+                  <div class="col-sm-12 col-md-5">
+                    <table class="table" style="margin-bottom: 0px;">
+                      <tbody>
+                        <tr>
+                          <td id='walletBalanceHeader'></td>
+                          <td id="walletBalance">...</td>
+                        </tr>
+                        <tr>
+                          <td>BTC Balance</td>
+                          <td id="walletBTCBalance">...</td>
+                        </tr>
+                        <tr>
+                          <td>USD Balance</td>
+                          <td id="walletUSDBalance">...</td>
+                        </tr>
+                        <tr>
+                          <td>Received</td>
+                          <td id="walletReceived">...</td>
+                        </tr>
+                        <tr>
+                          <td>Sent</td>
+                          <td id="walletSent">...</td>
+                        </tr>
+                        <tr>
+                          <td>Transactions</td>
+                          <td id="walletTransactions">...</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-sm-12 col-md-7">
+                    <div id="walletChart"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12" id="rigs"> <!-- rigs -->
+        <div class="card"> <!-- Hashrate -->
+          <div class="header">
+            <h2 class="card-title">Rigs <span class="badge badge-info" id="rigsBadge"></span></h2>
+          </div>
+          <div class="body table-responsive">
+            <table id="rigsTable" class="table table-striped table-no-bordered table-hover" cellspacing="0">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Hashrate (Now)</th>
+                  <th>Hashrate (Avg)</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Hashrate (Now)</th>
+                  <th>Hashrate (Avg)</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </tfoot>
+              <tbody id='rigsBody'>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+
+  /*$('#hashrateGraphCard').attr('class', function(i,c) { return c.replace('info',minerHashGraphHeaderColour); });
+  $('#blocksCard').attr('class', function(i,c) { return c.replace('info',minerBlocksHeaderColour); });
+  $('#balanceCard').attr('class', function(i,c) { return c.replace('info',minerBalanceHeaderColour); });
+  $('#hashrateCard').children('ul').attr('class', function(i,c) { return c.replace('info',minerHashrateHeaderColour); });
+  $('#rewardsCard').children('ul').attr('class', function(i,c) { return c.replace('info',minerRewardsHeaderColour); });
+  $('#rigsCard').attr('class', function(i,c) { return c.replace('danger',minerRigsHeaderColour); });
+  $('#rigsBadge').attr('class', function(i,c) { return c.replace('info',minerRigsBadgeColour); });
+  $('#subHeaderText').addClass('text-'+minerExplorerLinkColour);*/
+
+  if (typeof walletEnabled == 'undefined') walletEnabled = false;
+
+  if (!walletEnabled) {
+    $('#walletItem').remove();
+    $('#walletTable').remove();
+  }
+
+  var workerHashrateDataNew;
+  var workerHashrateChart;
+  var workerWalletChart;
+  var minHash;
+  var maxHash;
+  var _workerCount = 0;
+  var selectedWorker;
+  var table;
+  var customPayoutProgress;
+
+  function toggleFavourite() {
+    var address = (window.location.href.substring(window.location.href.lastIndexOf('/') + 1)).replace('#','');
+    var fav = Cookies.get(favouritesPrefix+address);
+    if (fav === undefined) {
+      Cookies.set(favouritesPrefix+address, 'true');
+      $('#favouriteButton i').removeClass("far");
+    } else {
+      Cookies.set(favouritesPrefix+address, fav === 'true' ? 'false' : 'true');
+      $('#favouriteButton i').removeClass(fav === 'true' ? 'fas' : 'far');
+    }
+    fav = Cookies.get(favouritesPrefix+address);
+    $('#favouriteButton i').addClass(fav === 'true' ? 'fas' : 'far');
+    updateFavouritesList();
+  }
+
+  var coinConfigCheck;
+  $(document).ready(function() {
+    if (window.matchMedia("(max-width: 991px)").matches) {
+      $('#statsAndRigs').insertBefore($('#graphAndBlocks'));
+      $('#statsAndRigs').attr('data-swapped','true');
+    }
+    $(window).resize(function() { 
+      if (window.matchMedia("(max-width: 991px)").matches) {
+        if ($('#statsAndRigs').attr('data-swapped')!=='true') {
+          $('#statsAndRigs').insertBefore($('#graphAndBlocks'));
+          $('#statsAndRigs').attr('data-swapped','true');
+        }
+      } else {
+        if ($('#statsAndRigs').attr('data-swapped')==='true') {
+          $('#graphAndBlocks').insertBefore($('#statsAndRigs'));
+          $('#statsAndRigs').attr('data-swapped','false');
+        }
+      }
+    });
+    if (favouritesEnabled) {
+      var address = (window.location.href.substring(window.location.href.lastIndexOf('/') + 1)).replace('#','');
+      var fav = Cookies.get(favouritesPrefix+address);
+      var active = "far";
+      if (fav !== undefined && fav === "true") {
+        active = "fas"
+      }
+      $('#subHeaderText').after('<button class="btn btn-custom btn-fab btn-fab-mini btn-round" style="line-height: 20px; margin-left: 15px;" onclick="toggleFavourite();" id="favouriteButton"><i class="'+active+' zel-icon zel-icon-heart-o" style="font-size: 18px; padding-right: 3px;"></i></button>');
+    }
+    coinConfigCheck = setInterval(() => {
+      if (coinConfigData !== undefined) {
+        clearInterval(coinConfigCheck);
+        updateWorkerStats();
+        $('.setting_switch .lv-btn').change(function() {
+          //console.log("change");
+          setTimeout(function() { doChart(); },10);
+        });
+      }
+    }, 200);
+
+    customPayoutProgress = $('#customPayoutProgress');
+
+    /*customPayoutProgress.circleProgress({
+      size: 35,
+      startAngle: -Math.PI / 2,
+      value: 0,
+      //lineCap: 'round',
+      thickness: 5,
+      emptyFill: "rgba(120,120,120,0.3)",
+      fill: {color: loadingCircleColour },
+      animation: { duration: 1500 }
+    });*/
+
+
+  });
+
+  function updateWorkerStats() {
+    var address = (window.location.href.substring(window.location.href.lastIndexOf('/') + 1)).replace('#','');
+    $.ajax({
+      Method: 'GET',
+      url: "{{=it.site}}/api/worker_stats2?address="+address+"&dataPoints=500",
+      dataType: 'json',
+      success: function (data) {
+        var stats = data;
+        console.log(data);
+        var minerShares = 0;
+        for (var w in data.workers) { 
+          _workerCount++; 
+          minerShares += data.workers[w].currRoundShares;
+        }
+        buildChartData(data);
+        doChart();
+        data.coin = data.coin || coinTicker;
+
+        $('#rewardCoinHeader').html(data.coin);
+
+        // WALLET
+        if (walletEnabled) {
+          $('#walletBalanceHeader').html(data.coin+" Balance");
+        }
+
+        var percentShares = (data.currentroundshares > 0 ? minerShares / data.currentroundshares * 100 : 0);
+        if (percentShares > 100) percentShares = 100;
+        $('#percentShareProgressHolder .progress-bar').css('width',percentShares+'%');
+        //if (percentShares > 16) {
+          $('#percentShareText').text(percentShares.toFixed(1)+'%');
+        //} else if (percentShares > 12) {
+        //  $('#percentShareText').text(percentShares.toFixed(1));
+        //} else {
+        //  $('#percentShareText').text('');
+        //}
+        $('#blockPercentageKnob').val(percentShares.toFixed(1)).knob();
+
+        //var sharesTable = "<table><tbody><tr><td>";
+        //sharesTable +=  "Percent of Block:</td><td>";
+        //sharesTable +=  percentShares.toFixed(1)+'%';
+        //sharesTable +=  "</td></tr>";
+        if (data.blockreward && data.blockreward.blockReward) {
+          //sharesTable +=  "<tr><td>";
+          //sharesTable +=  "Estimated "+data.coin+":</td><td>";
+          //sharesTable +=  ((percentShares/100)*data.blockreward.blockReward).toFixed(2);
+          //sharesTable +=  "</td></tr>";
+          $('#estimatedCoins').text(((percentShares/100)*data.blockreward.blockReward).toFixed(2));
+          //$('#percentShareProgressHolder').tooltip('dispose');
+          //$('#percentShareProgressHolder').attr('title','Estimated '+data.coin+': '+((percentShares/100)*data.blockreward.blockReward).toFixed(2));
+          //$('#percentShareProgressHolder').tooltip();
+        }
+        //sharesTable +=  "</tbody></table>";
+
+        var count = 0;
+
+        if ($.fn.dataTable.isDataTable('#rigsTable')) {
+          $('#rigsTable').DataTable().destroy();
+        }
+
+        $('#rigsBody').empty();
+        $('#rigSelector').empty();
+        $('#rigSelector').append('<button class="dropdown-item" type="button">Totals</button>');
+
+        for (var w in stats.workers) {
+          var htmlSafeName = w.split('.').join('_').replace(/[^\w\s]/gi, '');
+      		var saneWorkerName = getWorkerNameFromAddress(w);
+          var workerObj = stats.workers[w];
+
+          var tr = $('<tr></tr>');
+          var td = $('<td></td>'); // Expand/Collapse
+          tr.append(td);
+          var workerName = htmlSafeName.substr(htmlSafeName.indexOf("_")+1,htmlSafeName.length);
+          td = $('<td>'+workerName+'</td>'); // Worker Name
+          tr.append(td);
+          td = $('<td>'+workerObj.hashrateString+'</td>'); // Hashrate (Now)
+          tr.append(td);
+          td = $('<td>'+getReadableHashRateString(calculateAverageHashrate(saneWorkerName), coinConfigData.algo==='equihash')+'</td>'); // Hashrate (Avg)
+          tr.append(td);
+          td = $('<td>'+workerObj.diff+'</td>'); // DIFF
+          tr.append(td);
+          td = $('<td>'+(Math.round(workerObj.currRoundShares * 100) / 100)+'</td>'); // SHARES
+          tr.append(td);
+          var efficiency = (workerObj.invalidshares > 0) ? ((workerObj.shares / (workerObj.shares + workerObj.invalidshares))*100).toFixed(2) : (workerObj.diff > 0 ? 100 : 0);
+          if (workerObj.diff < 0) {
+            tr.addClass('serious-error');
+          }else if (efficiency < 95) {
+            tr.addClass('error');
+          }
+          td = $('<td>'+efficiency+'</td>'); // EFFICIENCY
+          tr.append(td);
+          td = $('<td>'+workerObj.luckDays+'</td>'); // LUCK
+          tr.append(td);
+          td = $('<td>'+workerObj.balance+'</td>'); // BALANCE
+          tr.append(td);
+          td = $('<td>'+workerObj.paid+'</td>'); // PAID
+          tr.append(td);
+          tr.appendTo($('#rigsBody'));
+
+          if (count == 0) {
+            $('#rigSelector').append('<div class="dropdown-divider"></div>');
+          }
+          $('#rigSelector').append('<button class="dropdown-item" type="button">'+workerName+'</button>');
+
+          count++;
+        }
+        $('#rigsBadge').html(count);
+
+        table = $('#rigsTable').DataTable({
+          "ordering": false,
+          "pagingType": "full_numbers",
+          "lengthMenu": [
+            [10, 25, 50, -1],
+            [10, 25, 50, "All"]
+          ],
+          select: 'single',
+          responsive: true,
+          language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Search records",
+          },
+          "columnDefs": [
+            { targets: [0,1,2,3], visible: true},
+            { targets: '_all', visible: false}
+          ],
+          "columns": [
+           { "className": 'details-control',
+             "data": null,
+             "defaultContent": '',
+             "render": function () {
+                         return '<i class="zel-icon zel-icon-plus-circle" aria-hidden="true"></i>';
+             },
+             width:"15px"
+           },
+           null,
+           null,
+           null,
+           null,
+           null,
+           null,
+           null,
+           null,
+           null
+          ]
+        });
+
+        // Add event listener for opening and closing details
+        $('#rigsTable tbody').off('click');
+        $('#rigsTable tbody').on('click', 'td.details-control', function () {
+          //console.log("Open or close?");
+            var tr = $(this).closest('tr');
+            var tdi = tr.find("i.zel-icon");
+            var row = table.row( tr );
+
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+                tdi.first().removeClass('zel-icon-minus-circle');
+                tdi.first().addClass('zel-icon-plus-circle');
+            }
+            else {
+                // Open this row
+                row.child( format(row.data()) ).show();
+                tr.addClass('shown');
+                tdi.first().removeClass('zel-icon-plus-circle');
+                tdi.first().addClass('zel-icon-minus-circle');
+            }
+        } );
+        table.on("user-select", function (e, dt, type, cell, originalEvent) {
+             if ($(cell.node()).hasClass("details-control")) {
+                 e.preventDefault();
+             }
+         });
+
+        $('#unconfirmedBalance').html(data.immature.toLocaleString(undefined, { minimumFractionDigits:2, maximumFractionDigits:2 })+' '+data.coin);
+        $('#unpaidBalance').html(data.balance.toLocaleString(undefined, { minimumFractionDigits:2, maximumFractionDigits:2 })+' '+data.coin);
+        $('#totalPaid').html(data.paid.toLocaleString(undefined, { minimumFractionDigits:2, maximumFractionDigits:2 })+' '+data.coin);
+        $('#minPayout').html((coinConfigData.minPayout || 0.1)+' '+data.coin);
+        $('#customPayout').html((data.custompayout >= 0 ? (data.custompayout.toLocaleString()+' '+data.coin) : 'Not Set'));
+        if (data.custompayout === -1) {
+          $('#customPayout').removeClass('text-custom');
+          $('#customPayout').addClass('text-danger');
+        }
+        //console.log(data.totalHash);
+        var payoutProgress = $('#customPayoutProgress');
+        if (data.custompayout >= 0) {
+          payoutProgress.removeClass('invisible');
+          //customPayoutProgress.circleProgress('value',data.balance / data.custompayout);
+          $('#customPayoutProgress .progress-bar').css('width',((data.balance / data.custompayout)*100)+'%');
+          payoutProgress.attr('data-original-title',((data.balance / data.custompayout)*100).toLocaleString(undefined, { minimumFractionDigits:2, maximumFractionDigits:2 })+"% of Custom Payout");
+        } else {
+          payoutProgress.removeClass('invisible');
+          payoutProgress.addClass('invisible'); // is this necessary? would it keep adding the same class?
+        }
+        $("#currentHashrate").text(getReadableHashRateString(data.totalHash, coinConfigData.algo==='equihash'));
+        /*$("#5mAvgHashrate").text(getReadableHashRateString(calculateTotalAverageHashrateServer(data.history, 5*1000*60), coinConfigData.algo==='equihash'));
+        $("#1hAvgHashrate").text(getReadableHashRateString(calculateTotalAverageHashrateServer(data.history, 60*1000*60), coinConfigData.algo==='equihash'));
+        $("#3hAvgHashrate").text(getReadableHashRateString(calculateTotalAverageHashrateServer(data.history, 3*60*1000*60), coinConfigData.algo==='equihash'));
+        $("#24hAvgHashrate").text(getReadableHashRateString(calculateTotalAverageHashrateServer(data.history, 24*60*1000*60), coinConfigData.algo==='equihash'));*/
+        $("#5mAvgHashrate").text(getReadableHashRateString(data.averages.avg5m, coinConfigData.algo==='equihash'));
+        $("#1hAvgHashrate").text(getReadableHashRateString(data.averages.avg1h, coinConfigData.algo==='equihash'));
+        $("#3hAvgHashrate").text(getReadableHashRateString(data.averages.avg3h, coinConfigData.algo==='equihash'));
+        $("#24hAvgHashrate").text(getReadableHashRateString(data.averages.avg24h, coinConfigData.algo==='equihash'));
+
+      }
+    });
+    var statsUrl = '{{=it.site}}/api/poolblocks';
+    $.ajax({
+      Method: 'GET',
+      url: statsUrl,
+      dataType: 'json',
+      success: function (data) {
+        var stats = data;
+        $('#subHeaderText').html('Miner:&nbsp;'+address);
+
+        for (var pool in stats.pools) {
+          if (pool !== poolCoin) continue;
+          var pooldata = stats.pools[pool];
+          var expAddress = pooldata.explorerAddress;
+          if (!expAddress) {
+            if (typeof explorerAddress != 'undefined') {
+              expAddress = explorerAddress;
+            }
+          }
+          if (expAddress) {
+            $('#subHeaderText').attr('href',expAddress+address);
+            $('#subHeaderText').attr('target','_blank');
+            //$('#subHeaderText').addClass('text-'+minerSubheaderColour);
+          }
+          var blockBody = $('#blocksBody');
+          blockBody.empty();
+          var blocks = Object.keys(pooldata.pending);
+          blocks.sort();
+          blocks.reverse();
+          for (var i = 0; i < blocks.length; i++) {
+            var blockData = pooldata.pending[blocks[i]];
+            var tr = $('<tr></tr>');
+            var td = $('<td>'+Number(blockData.blocknumber).toLocaleString()+'</td>');
+            tr.append(td);
+            td = $('<td>'+readableDate(blockData.time)+'</td>');
+            tr.append(td);
+            td = $('<td>'+blockData.diff+'</td>');
+            tr.append(td);
+            td = $('<td>-</td>');
+            if (blockData.ttf && blockData.lbf) {
+              var ttf = blockData.ttf;
+              var lbf = blockData.lbf;
+              if (lbf !== -1) {
+                lbf /= 60;
+                var effort = (lbf * 100 / ttf).toFixed(2);
+                td.text(effort+'%');
+                if (effort <= 100) {
+                  td.addClass('text-success');
+                } else {
+                  td.addClass('text-danger');
+                }
+              }
+              tr.append(td);
+              td = $('<td>-</td>');
+              if (lbf !== -1) {
+                var luck = '';
+                if (lbf > ttf) {
+                  luck = '-'+((lbf - ttf)*100 / ttf).toFixed(2);
+                  td.addClass('text-danger');
+                } else {
+                  luck = (ttf*100 / lbf).toFixed(2);
+                  td.addClass('text-success');
+                }
+                td.text(luck+'%');
+              }
+              tr.append(td);
+            } else {
+              tr.append(td);
+              td = $('<td>-</td>');
+              tr.append(td);
+            }
+            if (blockData.confirmations) {
+							if (blockData.confirmations >= 100 && coinConfigData.requireShielding) {
+								td = $('<td><div class="progress progress-lg mb-10"><div class="progress-bar bg-warning progress-bar-striped progress-bar-animated w-100" role="progressbar"><span><i class="zel-icon zel-icon-shield"></i> Shielding</span></div></div></td>');
+							} else {
+                if (blockData.confirmations < 15) {
+                  var b = '<td><div class="progress progress-lg mb-10">';
+                  b += '    <div class="progress-bar progress-bar-info active progress-bar-striped progress-bar-animated" aria-valuemin="0%" aria-valuemax="100%" style="width: '+Math.round(blockData.confirmations * 100 / 100)+'%; font-size: 11px;" role="progressbar" rel="tooltip" title="'+blockData.confirmations+' Confirmations"></div>';
+                  b += '  </div></td>';
+                  td = $(b);
+                } else {
+                  var b = '<td><div class="progress progress-lg mb-10">';
+                  b += '    <div class="progress-bar progress-bar-info active progress-bar-striped progress-bar-animated" aria-valuemin="0%" aria-valuemax="100%" style="width: '+Math.round(blockData.confirmations * 100 / 100)+'%; font-size: 11px;" role="progressbar" rel="tooltip" title="'+blockData.confirmations+' Confirmations"> '+blockData.confirmations+'%</div>';
+                  b += '  </div></td>';
+                  td = $(b);
+                }
+								//td = $('<td><div class="progress progress-lg mb-10"><div class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" style="width: '+Math.round(blockData.confirmations * 100 / 100)+'%;">'+blockData.confirmations+'%</div></div></td>');
+							}
+  					} else {
+  						td = $('<td><div class="progress progress-lg mb-10"><div class="progress-bar progress-bar-danger active progress-bar-striped progress-bar-animated " aria-valuemin="0%" aria-valuemax="100%" style="width: 100%; font-size: 11px;" role="progressbar">PENDING</div></div></td>');
+  					}
+  					tr.append(td);
+            tr.append(td);
+            td = $('<td><a href="'+pooldata.explorerBlock+blockData.blockhash+'" target="_blank" class="text-custom"><i class="zel-icon zel-icon-money2"></i></a></td>');
+            tr.append(td);
+            tr.appendTo(blockBody);
+          }
+        }
+      }
+    });
+    var paymentsUrl = '{{=it.site}}/api/miner_rewards?'+address;
+    $.ajax({
+      Method: 'GET',
+      url: paymentsUrl,
+      dataType: 'json',
+      success: function (data) {
+        var lasthour = 0;
+        var last12hours = 0;
+        var last24hours = 0;
+        var today = 0;
+        var yesterday = 0;
+        var last7days = 0;
+        var last30days = 0;
+        for (var i=0;i<data.length;i++) {
+          if (data[i].name !== poolCoin) continue;
+          if (data[i].address !== address) continue;
+          lasthour = data[i].lasthour;
+          last12hours = data[i].last12hours;
+          last24hours = data[i].last24hours;
+          today = data[i].today;
+          yesterday = data[i].yesterday;
+          last7days = data[i].last7days;
+          last30days = data[i].last30days;
+        }
+        $('#lastHourCoin').html(lasthour.toFixed(4));
+        $('#last12HourCoin').html(last12hours.toFixed(4));
+        $('#last24HourCoin').html(last24hours.toFixed(4));
+        $('#todayCoin').html(today.toFixed(4));
+        $('#yesterdayCoin').html(yesterday.toFixed(4));
+        $('#last7DaysCoin').html(last7days.toFixed(4));
+        $('#last30DaysCoin').html(last30days.toFixed(4));
+
+        $.ajax({
+          Method: 'GET',
+          url: "https://api.coingecko.com/api/v3/simple/price?ids="+coinGeckoID+"&vs_currencies=btc%2Cusd",
+          dataType: 'json',
+          success: function (data) {
+            if (data.hasOwnProperty(coinGeckoID)) {
+              var usd = data[coinGeckoID].usd || 0;
+              var btc = data[coinGeckoID].btc || 0;
+
+              $('#lastHourUSD').html("$"+(lasthour*usd).toFixed(2));
+              $('#last12HourUSD').html("$"+(last12hours*usd).toFixed(2));
+              $('#last24HourUSD').html("$"+(last24hours*usd).toFixed(2));
+              $('#todayUSD').html("$"+(today*usd).toFixed(2));
+              $('#yesterdayUSD').html("$"+(yesterday*usd).toFixed(2));
+              $('#last7DaysUSD').html("$"+(last7days*usd).toFixed(2));
+              $('#last30DaysUSD').html("$"+(last30days*usd).toFixed(2));
+
+              $('#lastHourBTC').html('<i class="zel-icon zel-icon-bitcoin"></i> '+(lasthour*btc).toFixed(8));
+              $('#last12HourBTC').html('<i class="zel-icon zel-icon-bitcoin"></i> '+(last12hours*btc).toFixed(8));
+              $('#last24HourBTC').html('<i class="zel-icon zel-icon-bitcoin"></i> '+(last24hours*btc).toFixed(8));
+              $('#todayBTC').html('<i class="zel-icon zel-icon-bitcoin"></i> '+(today*btc).toFixed(8));
+              $('#yesterdayBTC').html('<i class="zel-icon zel-icon-bitcoin"></i> '+(yesterday*btc).toFixed(8));
+              $('#last7DaysBTC').html('<i class="zel-icon zel-icon-bitcoin"></i> '+(last7days*btc).toFixed(8));
+              $('#last30DaysBTC').html('<i class="zel-icon zel-icon-bitcoin"></i> '+(last30days*btc).toFixed(8));
+
+              if (walletEnabled) {
+                fetchWalletData(address, function(data) {
+                  $('#walletBalance').text(data.balance || data.message);
+                  if (!data.message) {
+                    $('#walletBTCBalance').html('<i class="zel-icon zel-icon-bitcoin"></i> '+(data.balance*btc).toFixed(8));
+                    $('#walletUSDBalance').text(('$'+(data.balance*usd).toFixed(2)));
+                    $('#walletReceived').text(data.received || "Unknown");
+                    $('#walletSent').text(data.sent || "Unknown");
+                    $('#walletTransactions').text(data.transactions || "Unknown");
+
+                    if (typeof data.received != 'undefined') {
+                      var options = {
+                          chart: {
+                              width: 390,
+                              type: 'donut',
+                          },
+                          series: [data.received, data.sent],
+                          labels: ['Received', 'Sent'],
+                          fill: {
+                            type: 'gradient',
+                          }
+                      }
+
+                      if (workerWalletChart) {
+                        workerWalletChart.updateOptions(options, false, false, true);
+                      } else {
+                        workerWalletChart = new ApexCharts(document.querySelector("#walletChart"), options);
+                        workerWalletChart.render();
+                      }
+                    }
+                  } else {
+
+                  }
+                });
+              }
+
+            }
+          }
+        });
+
+      }
+    });
+    var statsUrl = '{{=it.site}}/api/minerstats';
+    $.ajax({
+      Method: 'GET',
+      url: statsUrl,
+      dataType: 'json',
+      success: function (data) {
+        var stats = data;
+        for (var pool in stats.pools) {
+          if (pool !== poolCoin) continue;
+          var pooldata = stats.pools[pool];
+
+          $("#networkHashrate").text(pooldata.poolStats.networkSolsString);
+          $("#networkDiff").text((parseFloat(pooldata.poolStats.networkDiff)).toFixed(2));
+          $("#networkBlockHeight").text(pooldata.poolStats.networkBlocks);
+          $("#networkBlockReward").text(pooldata.block.coininfo.blockReward);
+          $("#networkConnections").text(pooldata.poolStats.networkConnections);
+
+          var miners = pooldata.minerCount;
+          var workers = pooldata.workerCount;
+          var hashrate = pooldata.hashrateString;
+          //var hashrateAVG = (getReadableHashRateString(calculateAverageHashrate(pool)));
+          var luckDays = pooldata.luckDays;
+          var validblocks = pooldata.poolStats.validBlocks;
+
+          var poolFee = 0;
+          for (var fee in pooldata.poolFees) {
+            poolFee += pooldata.poolFees[fee];
+          }
+
+          $("#poolHashrate").text(hashrate);
+          if (luckDays < 0.04166667) {
+            $("#poolLuck").text((luckDays*24*60).toFixed(0)+" Minutes");
+          } else if (luckDays < 1) {
+            $("#poolLuck").text((luckDays*24).toFixed(2)+" Hours");
+          } else {
+            $("#poolLuck").text(luckDays+" Days");
+          }
+          $("#poolBlocksFound").text(validblocks);
+          $("#poolFee").text(poolFee+"%");
+          $("#poolMiners").text(miners+" / "+workers);
+
+        }
+      }
+    });
+
+    //$('body').change(function() {
+    //  doChart();
+    //});
+
+    /* Formatting function for row details - modify as you need */
+    function format ( d ) {
+        // `d` is the original data object for the row
+        return '<table cellpadding="0" cellspacing="0" border="0" style="margin-left:30px;">'+
+            '<tr>'+
+                '<td><i class="zel-icon zel-icon-line-chart"></i> Diff:</td>'+
+                '<td>'+d['4']+'</td>'+
+                '<td><i class="zel-icon zel-icon-cog"></i> Shares:</td>'+
+                '<td>'+d['5']+'</td>'+
+            '</tr>'+
+            '<tr>'+
+                '<td><i class="zel-icon zel-icon-tasks"></i> Efficiency:</td>'+
+                '<td>'+d['6']+'%</td>'+
+                '<td><i class="zel-icon zel-icon-gavel"></i> Luck:</td>'+
+                '<td>'+d['7']+'</td>'+
+            '</tr>'+
+            '<tr>'+
+                '<td><i class="zel-icon zel-icon-money2"></i> Balance:</td>'+
+                '<td>'+d['8']+'</td>'+
+                '<td><i class="zel-icon zel-icon-account_balance_wallet"></i> Paid:</td>'+
+                '<td>'+d['9']+'</td>'+
+            '</tr>'
+        '</table>';
+    }
+
+    function isToday(dateParameter) {
+      var today = new Date();
+      return dateParameter.getDate() === today.getDate() && dateParameter.getMonth() === today.getMonth() && dateParameter.getFullYear() === today.getFullYear();
+    }
+
+    function isInLastNDays(dateParameter, days) {
+      var today = new Date();
+      today.setHours(0);
+      today.setMinutes(0);
+      today.setSeconds(0);
+      return (today.getTime() - dateParameter.getTime()) < (84600000 * days);
+    }
+  }
+
+  function getWorkerNameFromAddress(w) {
+  	var worker = w;
+  	if (w.split(".").length > 1) {
+  		worker = w.split(".")[1];
+  		if (worker == null || worker.length < 1) {
+  			worker = "noname";
+  		}
+  	} else {
+  		worker = "noname";
+  	}
+  	return worker;
+  }
+
+  function calculateAverageHashrate(worker) {
+  	var count = 0;
+  	var total = 1;
+  	var avg = 0;
+  	for (var i = 0; i < workerHashrateDataNew.length; i++) {
+  		count = 0;
+  		for (var ii = 0; ii < workerHashrateDataNew[i].data.length; ii++) {
+  			if (worker == null || workerHashrateDataNew[i].name === worker) {
+  				count++;
+  				avg += parseFloat(workerHashrateDataNew[i].data[ii][1]);
+  			}
+  		}
+  		if (count > total)
+  			total = count;
+  	}
+  	avg = avg / total;
+  	return avg;
+  }
+
+  function calculateTotalAverageHashrateServer(history, time) {
+    var count = 0;
+  	var total = 1;
+    var avg = 0;
+    var now = new Date().getTime();
+    for (var worker in history) {
+  		count = 0;
+      for (var i = history[worker].length - 1; i >= 0; i--) {
+        if ((now - history[worker][i].time * 1000) < time) {
+          count++;
+          avg += parseFloat(history[worker][i].hashrate);
+        } else {
+          break;
+        }
+      }
+      if (count > total) {
+        total = count;
+      }
+    }
+  	avg = avg / total;
+    return avg;
+  }
+
+
+  function calculateTotalAverageHashrate(time) {
+  	var count = 0;
+  	var total = 1;
+  	var avg = 0;
+    var now = new Date();
+    //console.log(now.getTime()+" "+time);
+  	for (var i = 0; i < workerHashrateDataNew.length; i++) {
+  		count = 0;
+  		for (var ii = workerHashrateDataNew[i].data.length-1; ii >= 0; ii--) {
+        if ((now.getTime() - workerHashrateDataNew[i].data[ii][0]) < time) {
+				  count++;
+				  avg += parseFloat(workerHashrateDataNew[i].data[ii][1]);
+        } else {
+          break;
+        }
+  		}
+  		if (count > total)
+  			total = count;
+  	}
+  	avg = avg / total;
+  	return avg;
+  }
+
+  function buildChartData(statData) {
+    var workers = {};
+    var i=0;
+  	for (var w in statData.history) {
+  		var worker = getWorkerNameFromAddress(w);
+  		var a = workers[worker] = (workers[worker] || {
+  			hashrate: []
+      });
+      var history = statData.history[w];
+      var first = true;
+  		for (var wh in history) {
+        if (first) {
+          first = !first;
+        } else {
+          a.hashrate.push([history[wh].time * 1000, history[wh].hashrate]);
+        }
+  		}
+      i++;
+  	}
+
+    i = 0;
+    maxHash = 0;
+    minHash = Number.MAX_SAFE_INTEGER;
+    workerHashrateDataNew = [];
+    var hashrate;
+    for (var worker in workers) {
+      hashrate = workers[worker].hashrate;
+      workerHashrateDataNew.push({
+              name: worker,
+              data: hashrate
+      });
+      var actualRate;
+      for (var h in hashrate) {
+        actualRate = hashrate[h][1];
+        if (actualRate < minHash) minHash = actualRate;
+        if (actualRate > maxHash) maxHash = actualRate;
+      }
+
+  		i++;
+    }
+
+    var roundToMin = minHash < 1500 ? 100 : 1000;
+    var roundToMax = maxHash < 1500 ? 100 : 1000;
+
+    //console.log(minHash+" "+maxHash);
+
+    maxHash = Math.ceil(maxHash/roundToMax)*roundToMax;
+    minHash = (Math.round(minHash/roundToMin)*roundToMin)-roundToMin;
+
+    //console.log(minHash+" "+maxHash);
+    //console.log(workerHashrateData);
+  }
+
+  function doChart() {
+    var color = ($('body').hasClass('light_version') ? '#222' : '#ddd');
+    var legendColors = [];
+    for (var i=0;i<workerHashrateDataNew.length;i++) {
+      legendColors.push(color);
+    }
+    var options = {
+      chart: {
+        type: 'line',
+        toolbar: {
+          show: false
+        },
+        selection: { enabled: false },
+        zoom: { enabled: false }
+      },
+      series: workerHashrateDataNew,
+      xaxis: {
+        type: 'datetime',
+        labels: {
+          style: {
+            colors: color
+          },
+          format: 'd MMM, HH:mm'
+        }
+      },
+      yaxis: {
+        labels: {
+          formatter: function (val, index) {
+            return getReadableHashRateString(val, coinConfigData.algo==='equihash');
+          },
+          style: {
+            color: color
+          }
+        },
+        axisBorder: {
+          show: true,
+          color: color
+        },
+        axisTicks: {
+          show: true,
+          color: color
+        },
+        forceNiceScale: true,
+        min: minHash,
+        //max: maxHash
+      },
+      stroke: {
+        show: true,
+        curve: 'smooth',
+        lineCap: 'butt',
+        colors: undefined,
+        width: workerHashrateDataNew.length < 10 ? 2 : 1,
+        dashArray: 0,
+      },
+      legend: {
+        labels: {
+          colors: legendColors
+        }
+      },
+      tooltip: {
+        enabled: true,
+        shared: true,
+        x: {
+          show: true,
+          format: 'd MMM, HH:mm'
+        }
+      }
+    }
+
+    if (workerHashrateChart) {
+      workerHashrateChart.updateOptions(options, false, false, true);
+    } else {
+      workerHashrateChart = new ApexCharts(document.querySelector("#chart"), options);
+      workerHashrateChart.render();
+    }
+
+    var bgcolor = Cookies.get('bg-color');
+    var theme = 'dark';
+    if (bgcolor !== undefined && bgcolor==='white') {
+      theme = 'light';
+    }
+    $('.apexcharts-tooltip').removeClass('light').removeClass('dark').addClass(theme);
+    //console.log("doChart: "+theme+" "+color+" "+bgcolor);
+
+    /*if (workerHashrateDataNew.length > 4) {
+      for (var i=4;i<workerHashrateDataNew.length;i++) {
+        var series = workerHashrateDataNew[i];
+        //workerHashrateChart.toggleSeries(series.name);
+      }
+    }*/
+  }
+
+  function timeOfDayFormat(timestamp){
+      var dStr = d3.time.format('%I:%M %p')(new Date(timestamp));
+      if (dStr.indexOf('0') === 0) dStr = dStr.slice(1);
+      return dStr;
+  }
+
+  function updatePage() {
+    updateWorkerStats();
+  }
+  console.log("miner_stats.html v0.2.1");
+</script>
+
+
+<!--
+
+  v0.1.0 - initial version
+  v0.1.1 - tidy up graph tooltip
+  v0.2.0 - Updated to use Oculux dashboard
+  v0.2.1 - Fixed the 'live' gathering of current round shares
+--> 

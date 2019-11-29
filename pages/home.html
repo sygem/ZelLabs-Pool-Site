@@ -1,0 +1,911 @@
+<style>
+
+.body.top_counter {
+  padding: 18px;
+}
+.body.top_counter .icon {
+  width: 45px;
+  height: 45px;
+}
+
+</style>
+<div class="container-fluid">
+        <div class="row clearfix" style="margin-top: 20px;">
+          <div class="col-xxl-4 col-lg-4 col-md-5 col-sm-12"> <!-- Stats -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="row">
+                            <div class="col-5 text-center">
+                                <h5 class="mb-1 text-custom" id="poolHashrate"></h5>
+                                <div>Pool Hashrate</div>
+                            </div>
+                            <div class="col-2 text-center">
+                                <div class="card-value float-right text-muted"><i class="zel-icon zel-icon-sitemap"></i></div>
+                            </div>
+                            <div class="col-5 text-center">
+                                <h5 class="mb-1 text-custom" id="networkHashrate"></h5>
+                                <div>Network Hashrate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-wrapper flip-right">
+                    <div class="card" style="height: 102px;">
+                        <div class="front body">
+                            <div class="row">
+                                <div class="col-5 text-center">
+                                    <h5 class="mb-1 text-custom" id="networkDiff"></h5>
+                                    <div>Network Diff</div>
+                                </div>
+                                <div class="col-2 text-center">
+                                    <div class="card-value float-right text-muted"><i class="zel-icon zel-icon-line-chart"></i></div>
+                                </div>
+                                <div class="col-5 text-center">
+                                    <h5 class="mb-1 text-custom" id="networkBlockHeight"></h5>
+                                    <div>Block Height</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="back bg-danger body text-light">
+                            <div class="row">
+                                <div class="col-5 text-center">
+                                    <h5 class="mb-1" id="networkConnections"></h5>
+                                    <div>Connections</div>
+                                </div>
+                                <div class="col-2 text-center">
+                                    <div class="card-value float-right"><i class="zel-icon zel-icon-chain"></i></div>
+                                </div>
+                                <div class="col-5 text-center">
+                                    <h5 class="mb-1" id="networkVersion2"></h5>
+                                    <div>Version</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+    
+                    <!--</div>
+                </div>-->
+                <div class="row clearfix">
+                    <div class="col-xs-6 col-sm-6 col-xl-12 col-xxl-6">
+                        <div class="card">
+                            <div class="body top_counter">
+                                <div class="icon bg-success text-white"><i class="zel-icon zel-icon-hammer"></i> </div>
+                                <div class="content">
+                                    <span>Miners</span>
+                                    <h5 class="number mb-0 text-custom" id="poolMiners">...</h5>
+                                </div>
+                                <div class="icon bg-info text-white m-t-15"><i class="zel-icon zel-icon-desktop"></i> </div>
+                                <div class="content m-t-15">
+                                    <span>Workers</span>
+                                    <h5 class="number mb-0 text-custom" id="poolWorkers">...</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-xl-12 col-xxl-6">
+                      <div class="card-wrapper flip-up">
+                        <div class="card" style="height: 155px;">
+                            <div class="front p-1 px-1 body text-center">
+                                <div class="m-t-15">
+                                  <div>Pool Fee</div>
+                                  <h4 class="text-custom" id="poolFee"></h4>
+                                </div>
+                                <div class="m-t-15">
+                                    <div>Time To Find Block</div>
+                                    <h4 id="poolLuck" class="text-custom">...</h4>
+                                </div>
+                            </div>
+                        <div class="back p-3 px-4 body bg-success text-center text-light">
+                          <div>
+                            <div>Block Reward</div>
+                            <h3 id="networkBlockReward">...</h3>
+                          </div>
+                          <div class="m-t-15">
+                            <div>Blocks Found</div>
+                            <h3 id="poolBlocksFound">...</h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--<div class="row clearfix">
+                  <div class="col-sm-6 col-lg-12 col-xxl-6">
+                    <div class="card-wrapper flip-up">
+                      <div class="card s-widget-top-small">
+                        <div class="front p-3 px-4 body text-center">
+                          <div>
+                            <div>Pool Fee</div>
+                            <h4 class="text-custom m-t-5" id="poolFee"></h4>
+                          </div>
+                        </div>
+                        <div class="back p-3 px-4 body bg-success text-center text-light">
+                          <div>
+                            <div>Block Reward</div>
+                            <h3 id="networkBlockReward">...</h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-lg-12 col-xxl-6">
+                    <div class="card-wrapper flip-left">
+                      <div class="card s-widget-top-small">
+                        <div class="front p-3 px-4 body text-center">
+                          <div>
+                            <div>Time To Find Block</div>
+                            <h4 id="poolLuck" class="m-t-5 text-custom">...</h4>
+                          </div>
+                        </div>
+                        <div class="back p-3 px-4 body bg-danger text-center text-light">
+                          <div>
+                            <div>Blocks Found</div>
+                            <h3 id="poolBlocksFound">...</h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>-->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-12 col-lg-12">
+                <div class="card invisible" id="marketStats"> <!-- Market Stats -->
+                  <div class="header" id="marketStatsCard">
+                    <h2 class="card-title">Market Stats</h2>
+                  </div>
+                  <div class="body table-responsive">
+                    <table class="table table-striped">
+                      <tbody>
+                        <tr>
+                          <td id="usdPrice">...</td>
+                          <td id="btcPrice">...</td>
+                        </tr>
+                        <tr>
+                          <td>1h Change</td>
+                          <td id="1hChange">...</td>
+                        </tr>
+                        <tr>
+                          <td>24h Change</td>
+                          <td id="24hChange">...</td>
+                        </tr>
+                        <tr>
+                          <td>24h Volume</td>
+                          <td id="24hVolUSD">...</td>
+                        </tr>
+                        <tr>
+                          <td>24h Volume</td>
+                          <td id="24hVolBTC">...</td>
+                        </tr>
+                        <tr>
+                          <td>Market Cap</td>
+                          <td id="marketCap">...</td>
+                        </tr>
+                        <tr>
+                          <td>Rank</td>
+                          <td id="marketCapRank">...</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div> <!-- /Market Stats -->
+              </div>
+            </div>
+          </div>
+          <div class="col-xxl-8 col-lg-8 col-md-7 col-sm-12">
+            <div class="card"> <!-- Hashrate Graph -->
+              <div class="header" id="hashrateGraphCard">
+                <h2 class="card-title">Hashrate Graph</h2>
+                <ul class="header-dropdown dropdown">                                
+                    <li><a href="javascript:void(0);" class="full-screen" data-toggle="tooltip" data-title="Full-screen"><i class="zel-icon zel-icon-arrows"></i></a></li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div id="hashrateLineChart" style="height: 385px;">
+                </div>
+              </div>
+            </div> <!-- /Hashrate Graph -->
+            <div class="card"> <!-- Latest Blocks -->
+              <div class="header" id="blocksCard">
+                <h2 class="card-title">Latest Blocks</h2>
+                <ul class="header-dropdown dropdown">                                
+                    <li><a href="javascript:void(0);" class="full-screen" data-toggle="tooltip" data-title="Full-screen"><i class="zel-icon zel-icon-arrows"></i></a></li>
+                </ul>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover table-custom spacing5 display nowrap">
+                  <thead>
+                    <tr>
+                      <th>Block</th>
+                      <th>Mined</th>
+                      <th>Diff</th>
+                      <th style="width:200px;">Mined By</th>
+                      <th>Effort</th>
+                      <th>Luck</th>
+                      <th>Confirmations</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id='blocksBody'>
+                  </tbody>
+                </table>
+              </div>
+            </div> <!-- /Latest Blocks -->
+          </div>
+        </div>
+      </div>
+
+
+
+        <script>
+
+          if (coinGeckoID !== undefined && coinGeckoID !== "") {
+            $('#marketStats').removeClass('invisible');
+          }
+
+          function updateStats() {
+            var statsUrl = '{{=it.site}}/api/homestats';
+            $.ajax({
+              Method: 'GET',
+              url: statsUrl,
+              dataType: 'json',
+              success: function (data) {
+                var stats = data;
+                for (var pool in stats.pools) {
+                  if (pool !== poolCoin) continue;
+                  var pooldata = stats.pools[pool];
+                  var coinName = stats.pools[pool].name;
+                  var coinNameCaps = coinName.charAt(0).toUpperCase() + coinName.slice(1);
+                  var symbol = stats.pools[pool].symbol;
+                  var miners = stats.pools[pool].minerCount;
+                  var workers = stats.pools[pool].workerCount;
+                  var hashrate = stats.pools[pool].hashrateString;
+                  //var hashrateAVG = (getReadableHashRateString(calculateAverageHashrate(pool)));
+                  var luckDays = stats.pools[pool].luckDays;
+                  var validblocks = stats.pools[pool].poolStats.validBlocks;
+                  var totalPaid = (parseFloat(stats.pools[pool].poolStats.totalPaid)).toFixed(2);
+                  var networkBlocks = Number(stats.pools[pool].poolStats.networkBlocks).toLocaleString();
+                  var networkDiff = (parseFloat(stats.pools[pool].poolStats.networkDiff)).toFixed(2);
+                  var networkSols = (getReadableNetworkHashRateString(stats.pools[pool].poolStats.networkSols, coinConfigData.algo==='equihash'));
+                  var networkConnections = stats.pools[pool].poolStats.networkConnections;
+
+                  var poolFee = 0;
+                  for (var fee in pooldata.poolFees) {
+                    poolFee += pooldata.poolFees[fee];
+                  }
+
+                  //console.log(stats.pools[pool]);
+
+                  $("#poolHashrate").text(hashrate);
+                  if (luckDays < 0.04166667) {
+                    $("#poolLuck").text((luckDays*24*60).toFixed(0)+" Minutes");
+                  } else if (luckDays < 1) {
+                    $("#poolLuck").text((luckDays*24).toFixed(2)+" Hours");
+                  } else {
+                    $("#poolLuck").text(luckDays+" Days");
+                  }
+                  $("#poolBlocksFound").text(validblocks);
+                  $("#poolFee").text(poolFee+"%");
+                  $('#poolFeeKnob').val(poolFee).trigger('change');
+                  $("#poolMiners").text(miners);
+                  $("#poolWorkers").text(workers);
+
+                  $("#networkHashrate").text(stats.pools[pool].poolStats.networkSolsString);
+                  $("#networkDiff").text(networkDiff);
+                  $("#networkBlockHeight").text(networkBlocks);
+                  $("#networkBlockReward").text(stats.pools[pool].block.coininfo.blockReward+' '+'{{=it.coin}}');
+                  $("#networkConnections").text(networkConnections);
+                  $("#networkVersion").text(stats.pools[pool].poolStats.networkVersion);
+                  $('#networkVersion2').text(stats.pools[pool].poolStats.networkProtocolVersion);
+
+                  var blockBody = $('#blocksBody');
+                  blockBody.empty();
+                  var blockTable = pooldata.block.blocktable;
+                  //console.log(blockTable);
+                  var count = -1;
+                  for (var block in blockTable.pendingblocks) {
+                    count++;
+                    var blockData = blockTable.pendingblocks[block].split(":");
+                    var tr = $('<tr></tr>');
+                    var td = $('<td>'+Number(blockData[2]).toLocaleString()+'</td>');
+                    tr.append(td);
+                    td = $('<td>'+readableDate(blockData[4])+'</td>');
+                    tr.append(td);
+                    if (blockData.length > 5) {
+                      td = $('<td>'+blockData[5]+'</td>');
+                    } else {
+                      td = $('<td>-</td>');
+                    }
+                    tr.append(td);
+                    var workernames = blockData[3].split('.');
+                    var workername = workernames[workernames.length==2 ? 1 : 0];
+                    if (blockData.length > 8) {
+                      var location = blockData[8];
+                      td = $('<td></td>');
+                      var a = $('<a href="/coins/'+coin+'/workers/'+workernames[0]+'" data-toggle="tooltip" data-title="'+location+'" class="text-custom">'+workername+'</a>');
+                      td.append(a);
+                      /*let divCarousel = $('<div id="slider2-'+blockData[2]+'" class="carousel vert slide" data-ride="carousel" data-pause="false" data-interval="5000"></div');
+                      var divCarouselInner = $('<div class="carousel-inner"></div>');
+                      var divItem1 = $('<div class="carousel-item active"></div>');
+                      divItem1.append('<a href="/coins/'+coin+'/workers/'+workernames[0]+'" class="text-custom">'+workername+'</a>');
+                      var divItem2 = $('<div class="carousel-item"></div>');
+                      divItem2.append('<a href="/coins/'+coin+'/workers/'+workernames[0]+'" class="text-custom">'+location+'</a>');
+                      divCarouselInner.append(divItem1);
+                      divCarouselInner.append(divItem2);
+                      divCarousel.append(divCarouselInner);
+                      td.append(divCarousel);
+                      tr.append(td);
+                      setTimeout(function() {divCarousel.carousel();},count*80);*/
+                      //td = $('<td><a href="/coins/'+coin+'/workers/'+workernames[0]+'" data-toggle="tooltip" data-title="'+location+'" class="text-custom">'+workername+'</a></td>');
+                      tr.append(td);
+                      a.tooltip();
+
+                    } else {
+                      td = $('<td><a href="/coins/'+coin+'/workers/'+workernames[0]+'" class="text-custom">'+workername+'</a></td>');
+                      tr.append(td);
+                    }
+                    td = $('<td>-</td>');
+                    if (blockData.length > 7) {
+                      var ttf = parseInt(blockData[6]);
+                      var lbf = parseInt(blockData[7]);
+                      if (lbf !== -1) {
+                        lbf /= 60;
+                        var effort = (lbf * 100 / ttf).toFixed(2);
+                        td.text(effort+'%');
+                        if (effort <= 100) {
+                          td.addClass('text-success');
+                        } else {
+                          td.addClass('text-danger');
+                        }
+                      }
+                      tr.append(td);
+                      td = $('<td>-</td>');
+                      if (lbf !== -1) {
+                        var luck = '';
+                        if (lbf > ttf) {
+                          luck = '-'+((lbf - ttf)*100 / ttf).toFixed(2);
+                          td.addClass('text-danger');
+                        } else {
+                          luck = (ttf*100 / lbf).toFixed(2);
+                          td.addClass('text-success');
+                        }
+                        td.text(luck+'%');
+                      }
+                      tr.append(td);
+                    } else {
+                      tr.append(td);
+                      td = $('<td>-</td>');
+                      tr.append(td);
+                    }
+                    td = $('<td></td>');
+                    var b = '';
+                    if (blockTable.confirms) {
+                      if (blockTable.confirms[blockData[0]]) {
+                        if (blockTable.confirms[blockData[0]] < 100) {
+                          if (blockTable.confirms[blockData[0]] < 15) {
+                            b = '  <div class="progress progress-lg mb-10">';
+                            b += '    <div class="progress-bar progress-bar-info active progress-bar-striped progress-bar-animated" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(blockTable.confirms[blockData[0]] * 100 / 100)+'" style="width: '+Math.round(blockTable.confirms[blockData[0]] * 100 / 100)+'%; font-size: 11px;" role="progressbar" data-toggle="tooltip" title="'+blockTable.confirms[blockData[0]]+' Confirmations"></div>';
+                            b += '  </div>';
+                          } else {
+                            b = '  <div class="progress progress-lg mb-10">';
+                            b += '    <div class="progress-bar progress-bar-info active progress-bar-striped progress-bar-animated" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(blockTable.confirms[blockData[0]] * 100 / 100)+'" style="width: '+Math.round(blockTable.confirms[blockData[0]] * 100 / 100)+'%; font-size: 11px;" role="progressbar" data-toggle="tooltip" title="'+blockTable.confirms[blockData[0]]+' Confirmations"> '+blockTable.confirms[blockData[0]]+'%</div>';
+                            b += '  </div>';
+                          }
+                        } else if (coinConfigData.requireShielding === true) {
+                          b = '  <div class="progress progress-lg mb-10">';
+                          b += '    <div class="progress-bar progress-bar-warning active progress-bar-striped progress-bar-animated bg-warning" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" style="width: 100%; font-size: 11px;" role="progressbar">Shielding</div>';
+                          b += '  </div>';
+                        } else {
+                          var b = '  <div class="progress progress-lg mb-10 ">';
+                          b += '    <div class="progress-bar progress-bar-info active progress-bar-striped progress-bar-animated" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" style="width: 100%; font-size: 11px;" role="progressbar">100%</div>';
+                          b += '  </div>';
+                        }
+                      } else {
+                        b = '  <div class="progress progress-lg mb-10">';
+                        b += '    <div class="progress-bar progress-bar-danger active progress-bar-striped progress-bar-animated " aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"  style="width: 100%; font-size: 11px;" role="progressbar">PENDING</div>';
+                        b += '  </div>';
+                      }
+                    } else {
+                      b = '  <div class="progress progress-lg mb-10 ">';
+                      b += '    <div class="progress-bar progress-bar-info progress-bar-striped" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"  style="width: 100%; font-size: 11px;" role="progressbar"></div>';
+                      b += '  </div>';
+                    }
+                    td.append($(b));
+                    tr.append(td);
+                    td = $('<td><a href="'+pooldata.block.blockURL+blockData[0]+'" target="_blank" class="text-custom"><i class="zel-icon zel-icon-money2"></i></a></td>');
+                    tr.append(td);
+                    tr.appendTo(blockBody);
+                  }
+                  var confirmedCount = 0;
+                  for (var block in blockTable.confirmedblocks) {
+                    count++;
+                    confirmedCount++;
+                    if (confirmedCount > 20) break;
+                    var blockData = blockTable.confirmedblocks[block].split(":");
+                    var tr = $('<tr></tr>');
+                    var td = $('<td>'+Number(blockData[2]).toLocaleString()+'</td>');
+                    tr.append(td);
+                    td = $('<td>'+readableDate(blockData[4])+'</td>');
+                    tr.append(td);
+                    if (blockData.length > 5) {
+                      td = $('<td>'+blockData[5]+'</td>');
+                    } else {
+                      td = $('<td>-</td>');
+                    }
+                    tr.append(td);
+                    var workernames = blockData[3].split('.');
+                    var workername = workernames[workernames.length==2 ? 1 : 0];
+                    if (blockData.length > 8) {
+                      var location = blockData[8];
+                      td = $('<td></td>');
+                      var a = $('<a href="/coins/'+coin+'/workers/'+workernames[0]+'" data-toggle="tooltip" data-title="'+location+'" class="text-custom">'+workername+'</a>');
+                      td.append(a);
+                      tr.append(td);
+                      a.tooltip();
+                      /*var location = blockData[8];
+                      td = $('<td></td>');
+                      let divCarousel = $('<div id="slider2-'+blockData[2]+'" class="carousel vert slide" data-ride="carousel" data-pause="false" data-interval="5000"></div');
+                      var divCarouselInner = $('<div class="carousel-inner"></div>');
+                      var divItem1 = $('<div class="carousel-item active"></div>');
+                      divItem1.append('<a href="/coins/'+coin+'/workers/'+workernames[0]+'" class="text-custom">'+workername+'</a>');
+                      var divItem2 = $('<div class="carousel-item"></div>');
+                      divItem2.append('<a href="/coins/'+coin+'/workers/'+workernames[0]+'" class="text-custom">'+location+'</a>');
+                      divCarouselInner.append(divItem1);
+                      divCarouselInner.append(divItem2);
+                      divCarousel.append(divCarouselInner);
+                      td.append(divCarousel);
+                      tr.append(td);
+                      setTimeout(function() {divCarousel.carousel();},count*80);*/
+                    } else {
+                      td = $('<td><a href="/coins/'+coin+'/workers/'+workernames[0]+'" class="text-custom">'+workername+'</a></td>');
+                      tr.append(td);
+                    }
+                    td = $('<td>-</td>');
+                    if (blockData.length > 7) {
+                      var ttf = parseInt(blockData[6]);
+                      var lbf = parseInt(blockData[7]);
+                      if (lbf !== -1) {
+                        lbf /= 60;
+                        var effort = (lbf * 100 / ttf).toFixed(2);
+                        td.text(effort+'%');
+                        if (effort <= 100) {
+                          td.addClass('text-success');
+                        } else {
+                          td.addClass('text-danger');
+                        }
+                      }
+                      tr.append(td);
+                      td = $('<td>-</td>');
+                      if (lbf !== -1) {
+                        var luck = '';
+                        if (lbf > ttf) {
+                          luck = '-'+((lbf - ttf)*100 / ttf).toFixed(2);
+                          td.addClass('text-danger');
+                        } else {
+                          luck = (ttf*100 / lbf).toFixed(2);
+                          td.addClass('text-success');
+                        }
+                        td.text(luck+'%');
+                      }
+                      tr.append(td);
+                    } else {
+                      tr.append(td);
+                      td = $('<td>-</td>');
+                      tr.append(td);
+                    }
+                    td = $('<td></td>');
+                    var b = '  <div class="progress progress-lg mb-10 ">';
+                    b += '    <div class="progress-bar progress-bar-success active progress-bar-striped" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" style="width: 100%; font-size: 11px;" role="progressbar">PAID</div>';
+                    b += '  </div>';
+                    td.append($(b));
+                    tr.append(td);
+                    td = $('<td><a href="'+pooldata.block.blockURL+blockData[0]+'" target="_blank" class="text-custom"><i class="zel-icon zel-icon-money2"></i></a></td>');
+                    tr.append(td);
+                    tr.appendTo(blockBody);
+                  }
+
+                }
+              }
+            });
+          }
+
+          var chart;
+          var poolHashArray = [];
+          var poolHashAvgArray = [];
+          var networkHashArray = [];
+          var networkDiffArray = [];
+          var timeLabelsArray = [];
+          var minDiff = Number.MAX_SAFE_INTEGER;
+          var maxDiff = 0;
+          var maxPoolHash = 0;
+          var minPoolHash = Number.MAX_SAFE_INTEGER;
+          var seriesShowing = [true,true,false,true];
+          var seriesNames = ['Pool Hash', 'Pool Hash Avg', 'Network Hash', 'Network Diff'];
+
+          var coinConfigCheck;
+          $(document).ready(function() {
+            coinConfigCheck = setInterval(() => {
+              if (coinConfigData !== undefined) {
+                clearInterval(coinConfigCheck);
+                updateStats();
+                updateChart();
+                updateMarketStats();
+                $('.setting_switch .lv-btn').change(function() {
+                  //console.log("change");
+                  setTimeout(function() { doChart(); },10);
+                });
+              }
+            }, 200);
+          });
+          function doChart() {
+            var color = ($('body').hasClass('light_version') ? '#222' : '#ddd');
+            var legendColors = [];
+            for (var i=0;i<3;i++) { // currently there are 3 series on the graph
+              legendColors.push(color);
+            }
+
+            //console.log(minPoolHash+" "+maxPoolHash);
+            var options = {
+              chart: {
+                type: 'line',
+                toolbar: {
+                  show: false
+                },
+                selection: { enabled: false },
+                zoom: { enabled: false },
+                height: 370,
+                events: {
+                  legendClick: function(chartContext, seriesIndex, config) {
+                    seriesShowing[seriesIndex] = !seriesShowing[seriesIndex];
+                    if (seriesIndex == 2) { // network hash
+                      updateChart();
+                      doChart();
+                    }
+                  }
+                }
+              },
+              series: [
+                { name: seriesNames[0], data: poolHashArray },
+                { name: seriesNames[1], data: poolHashAvgArray },
+                { name: seriesNames[2], data: networkHashArray },
+                { name: seriesNames[3], data: networkDiffArray }
+              ],
+              xaxis: {
+                type: 'datetime',
+                labels: {
+                  style: {
+                    colors: color
+                  },
+                  format: 'd MMM, HH:mm'
+                }
+              },
+              yaxis: [{
+                seriesName: seriesNames[0],
+                opposite: false,
+                show: true,
+                showAlways: true,
+                forceNiceScale: true,
+                axisBorder: {
+                  show: true,
+                  color: color
+                },
+                axisTicks: {
+                  show: true,
+                  color: color
+                },
+                labels: {
+                  formatter: function (val, index) {
+                    return $(window).width() > 500 ? getReadableNetworkHashRateString(val, coinConfigData.algo==='equihash') : '';
+                  },
+                  style: {
+                    color: color
+                  }
+                },
+                //min: 18000,
+                //max: 26000,
+                min: minPoolHash,
+                max: maxPoolHash
+              },{
+                seriesName: seriesNames[0],
+                opposite: false,
+                show: false,
+                forceNiceScale: true,
+                labels: {
+                  formatter: function (val, index) {
+                    return $(window).width() > 500 ? getReadableNetworkHashRateString(val, coinConfigData.algo==='equihash') : '';
+                  },
+                  style: {
+                    color: color
+                  }
+                },
+                //min: 18000,
+                //max: 26000,
+                min: minPoolHash,
+                max: maxPoolHash
+              },{
+                seriesName: seriesNames[0],
+                opposite: false,
+                forceNiceScale: true,
+                show: false,
+                labels: {
+                  formatter: function (val, index) {
+                    return $(window).width() > 500 ? getReadableNetworkHashRateString(val, coinConfigData.algo==='equihash') : '';
+                  },
+                  style: {
+                    color: color
+                  }
+                },
+                //min: 18000,
+                //max: 26000,
+                min: minPoolHash,
+                max: maxPoolHash
+              },{
+                seriesName: seriesNames[3],
+                opposite: true,
+                axisBorder: {
+                  show: true,
+                  color: color
+                },
+                axisTicks: {
+                  show: true,
+                  color: '#ddd'
+                },
+                labels: {
+                  formatter: function (val, index) {
+                    return $(window).width() > 500 ? val.toFixed(3) : '';
+                  },
+                  style: {
+                    color: color
+                  }
+                },
+                title: {
+                  text: $(window).width() > 500 ? 'Network Diff' : '',
+                  style: {
+                    color: color
+                  }
+                },
+                min: minDiff,
+                max: maxDiff
+              }],
+              legend: {
+                labels: {
+                  colors: legendColors
+                }
+              },
+              stroke: {
+                show: true,
+                curve: 'smooth',
+                lineCap: 'butt',
+                colors: undefined,
+                width: 2,
+                dashArray: 0,
+              },
+              tooltip: {
+                enabled: true,
+                shared: true,
+                x: {
+                  show: true,
+                  format: 'd MMM, HH:mm'
+                }
+              }
+            }
+
+            if (chart) {
+              chart.updateOptions(options, false, false, false);
+              for (var i = 0;i<4;i++) {
+                if (!seriesShowing[i]) {
+                  chart.toggleSeries(seriesNames[i]);
+                }
+              }
+            } else {
+              chart = new ApexCharts(document.querySelector("#hashrateLineChart"), options);
+              chart.render();
+              chart.toggleSeries('Network Hash');
+            }
+
+            var bgcolor = Cookies.get('bg-color');
+            var theme = 'dark';
+            if (bgcolor !== undefined && bgcolor==='white') {
+              theme = 'light';
+            }
+            $('.apexcharts-tooltip').removeClass('light').removeClass('dark').addClass(theme);
+            //console.log("doChart: "+theme+" "+color+" "+bgcolor);
+          }
+
+          function updateChart() {
+            $.ajax({
+              Method: 'GET',
+              url: "{{=it.site}}/api/homegraphdata?maxData=500", // TODO Make this a parameter
+              dataType: 'json',
+              success: function (data) {
+                //console.log(data);
+
+                minPoolHash = Number.MAX_SAFE_INTEGER;
+                maxPoolHash = 0;
+                //var minNetHash = Number.MAX_SAFE_INTEGER;
+                //var maxNetHash = 0;
+                minDiff = Number.MAX_SAFE_INTEGER;
+                maxDiff = 0;
+
+                //var step = Math.ceil(data.length / 500.0);
+                var step = 1;
+                poolHashArray.length = 0;
+                networkHashArray.length = 0;
+                networkDiffArray.length = 0;
+                timeLabelsArray.length = 0;
+
+                for (var i = 0, length = data.length; i < length; i+=step) {
+                  var poolData = data[i].pools[poolCoin];
+                  if (poolData === undefined) continue;
+                  if (!poolData.networkHash) continue;
+                  var poolHash = (coinConfigData.algo==='equihash' ? poolData.hashrate*2/1000000.0 : poolData.hashrate);
+                  var netHash = parseInt(poolData.networkHash);
+                  var diff = parseInt(poolData.networkDiff);
+                  //if (netHash < 100 || diff < 5) { // some odd data?
+                  //  continue;
+                  //}
+                  //console.log(poolData);
+                  poolHashArray.push([data[i].time*1000,poolHash]);
+                  networkHashArray.push([data[i].time*1000,netHash]);
+                  networkDiffArray.push([data[i].time*1000,diff]);
+                  timeLabelsArray.push(data[i].time*1000);
+                  if (poolHash < minPoolHash) minPoolHash = poolHash;
+                  if (seriesShowing[2]) {
+                    if (netHash > maxPoolHash) maxPoolHash = netHash;
+                  } else {
+                    if (poolHash > maxPoolHash) maxPoolHash = poolHash;
+                  }
+                  /*if (poolHash > maxPoolHash) maxPoolHash = poolHash;
+                  if (netHash < minNetHash) minNetHash = netHash;
+                  if (netHash > maxNetHash) maxNetHash = netHash;*/
+                  if (diff < minDiff) minDiff = diff;
+                  if (diff > maxDiff) maxDiff = diff;
+                }
+
+                poolHashArray.sort(function(a,b){return a[0]-b[0]});
+                networkHashArray.sort(function(a,b){return a[0]-b[0]});
+                networkDiffArray.sort(function(a,b){return a[0]-b[0]});
+                timeLabelsArray.sort(function(a,b){return a[0]-b[0]});
+
+                poolHashAvgArray.length = 0;
+                var dObj = ssci.smooth.EWMA()
+                                      .x(function(d){ return d[0];})
+                                      .y(function(d){ return d[1];})
+                                      .data(poolHashArray)
+                                      .factor(0.05);
+                dObj();
+                poolHashAvgArray = dObj.output();
+
+                maxDiff = Math.ceil(maxDiff/1000)*1000;
+                minDiff = (Math.round(minDiff/1000)*1000)-1000;
+                minPoolHash = (Math.round(minPoolHash/1000)*1000)-1000;
+                maxPoolHash = Math.ceil(maxPoolHash/1000)*1000;
+                if (minPoolHash < 0) minPoolHash = 0;
+                if (minDiff < 0) minDiff = 0;
+                //console.log(minDiff+" "+maxDiff);
+                doChart();
+              }
+            });
+          }
+          function updateMarketStats() {
+            $.ajax({
+              Method: 'GET',
+              url: "https://api.coingecko.com/api/v3/coins/"+coinGeckoID+"?tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false",
+              dataType: 'json',
+              success: function (data) {
+                //console.log(data);
+                if (data.hasOwnProperty("market_data")) {
+                  $('#btcPrice').html('<i class="zel-icon zel-icon-bitcoin"></i> '+data.market_data.current_price.btc.toFixed(8));
+                  $('#usdPrice').html("$"+data.market_data.current_price.usd.toFixed(2).toLocaleString());
+                  if (data.market_data.price_change_percentage_1h_in_currency.btc) {
+                    var oneHchange = data.market_data.price_change_percentage_1h_in_currency.btc.toFixed(2);
+                    $('#1hChange').html(oneHchange.toLocaleString()+'%');
+                    $('#1hChange').removeClass();
+                    if (oneHchange < 0) {
+                      $('#1hChange').addClass('text-danger');
+                    } else if (oneHchange > 0) {
+                      $('#1hChange').addClass('text-success');
+                    }
+                  } else {
+                    $('#1hChange').html('0%');
+                  }
+                  if (data.market_data.price_change_percentage_24h_in_currency.btc) {
+                    var twentyfourHchange = data.market_data.price_change_percentage_24h_in_currency.btc.toFixed(2);
+                    $('#24hChange').html(twentyfourHchange.toLocaleString()+'%');
+                    $('#24hChange').removeClass();
+                    if (twentyfourHchange < 0) {
+                      $('#24hChange').addClass('text-danger');
+                    } else if (twentyfourHchange > 0) {
+                      $('#24hChange').addClass('text-success');
+                    }
+                  } else {
+                    $('#24hChange').html('0%');
+                  }
+                  $('#24hVolUSD').html("$"+data.market_data.total_volume.usd.toLocaleString());
+                  $('#24hVolBTC').html('<i class="zel-icon zel-icon-bitcoin"></i> '+data.market_data.total_volume.btc);
+                  $('#marketCap').html("$"+data.market_data.market_cap.usd.toLocaleString());
+                  $('#marketCapRank').html(data.market_data.market_cap_rank);
+                }
+              }
+            });
+          }
+
+          function updatePage() {
+            updateStats();
+            updateChart();
+            updateMarketStats();
+          }
+          console.log("home.html v0.2.1");
+
+        </script>
+        <script src="/assets/js/plugins/ssci-big.min.js"></script>
+        <script src="/assets/vendor/jquery-knob/jquery.knob.min.js"></script><!-- Jquery Knob Plugin Js -->
+        <script>
+$(function () {
+    $('.knob').knob({
+        draw: function () {
+            // "tron" case
+            if (this.$.data('skin') == 'tron') {
+
+                var a = this.angle(this.cv)  // Angle
+                    , sa = this.startAngle          // Previous start angle
+                    , sat = this.startAngle         // Start angle
+                    , ea                            // Previous end angle
+                    , eat = sat + a                 // End angle
+                    , r = true;
+
+                this.g.lineWidth = this.lineWidth;
+
+                this.o.cursor
+                    && (sat = eat - 0.3)
+                    && (eat = eat + 0.3);
+
+                if (this.o.displayPrevious) {
+                    ea = this.startAngle + this.angle(this.value);
+                    this.o.cursor
+                        && (sa = ea - 0.3)
+                        && (ea = ea + 0.3);
+                    this.g.beginPath();
+                    this.g.strokeStyle = this.previousColor;
+                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+                    this.g.stroke();
+                }
+
+                this.g.beginPath();
+                this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
+                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+                this.g.stroke();
+
+                this.g.lineWidth = 2;
+                this.g.beginPath();
+                this.g.strokeStyle = this.o.fgColor;
+                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+                this.g.stroke();
+
+                return false;
+            }
+        }
+    });
+    $(".rtl .knob").knob({
+		draw: function () {
+		   //style rtl
+			this.i.css({
+				'margin-right': '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px',
+				'margin-left': 'auto'
+			});
+		},
+	});
+});
+        </script>
+<!--
+  v0.1.0 - initial version
+  v0.1.1 - remove Shielding from blocks if coin doesn't support it
+  v0.2.0 - Updated to use Oculux dashboard
+  v0.2.1 - Changed the rotating stratum/miner display to use a tooltip instead
+--> 

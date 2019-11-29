@@ -1,0 +1,182 @@
+<div class="container-fluid" style="display: flex; justify-content: flex-start;">
+    <div class="card card-plain">
+<div class="row m-t-20">
+  <div class="col-lg-9 col-sm-12"> <!-- Payments -->
+    <div class="card"> <!-- Pool Stats -->
+      <div class="header">
+        <h2 class="card-title">Payments</h2>
+      </div>
+      <div class="card-body table-responsive">
+        <table id="paymentsTable" class="table table-striped table-no-bordered table-hover" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Blocks</th>
+              <th>Date</th>
+              <th>Miners</th>
+              <th>Shares</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>Blocks</th>
+              <th>Date</th>
+              <th>Miners</th>
+              <th>Shares</th>
+              <th>Amount</th>
+            </tr>
+          </tfoot>
+          <tbody id="paymentsBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-sm-12">
+    <div class="card" style="margin-top: 20px;"> <!-- Miner Stats -->
+      <div class="body">
+        <div class="d-flex align-items-center">
+          <div class="icon-in-bg bg-custom text-white rounded-circle">
+            <i class="zel-icon zel-icon-hammer"></i>
+          </div>
+          <div class="ml-4">
+            <span>Miners</p>
+            <h4 class="mb-0 font-weight-medium text-custom" id='minerCount'>...</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card"> <!-- Worker Stats -->
+      <div class="body">
+        <div class="d-flex align-items-center">
+          <div class="icon-in-bg bg-custom text-white rounded-circle">
+            <i class="zel-icon zel-icon-rocket"></i>
+          </div>
+          <div class="ml-4">
+            <span>Workers</p>
+            <h4 class="mb-0 font-weight-medium text-custom" id='workerCount'>...</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card"> <!-- Shares Stats -->
+      <div class="body">
+        <div class="d-flex align-items-center">
+          <div class="icon-in-bg bg-custom text-white rounded-circle">
+            <i class="zel-icon zel-icon-cogs"></i>
+          </div>
+          <div class="ml-4">
+            <span>Shares</p>
+            <h4 class="mb-0 font-weight-medium text-custom" id='sharesCount'>...</h4>
+          </div>
+        </div>
+      </div>
+    </div> <!-- Some Stats -->
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+
+  /*$('#paymentsCard').attr('class', function(i,c) { return c.replace('info',paymentsHeaderColour); });
+  $('#minerCountCard').attr('class', function(i,c) { return c.replace('danger',paymentsStatsHeaderColour); });
+  $('#workerCountCard').attr('class', function(i,c) { return c.replace('danger',paymentsStatsHeaderColour); });
+  $('#shareCountCard').attr('class', function(i,c) { return c.replace('danger',paymentsStatsHeaderColour); });*/
+
+  var table;
+  function updatePayments() {
+    var url = '{{=it.site}}/api/poolpayments';
+    $.ajax({
+      Method: 'GET',
+      url: url,
+      dataType: 'json',
+      success: function (data) {
+        var stats = data;
+        for (var pool in stats) {
+          if (stats[pool].name !== poolCoin) continue;
+          var pooldata = stats[pool];
+          var paymentsBody = $('#paymentsBody');
+          paymentsBody.empty();
+          //console.log(pooldata);
+          for (var p in pooldata.payments) {
+            var payment = pooldata.payments[p];
+            if (payment.blocks.length===0 && payment.miners===1 && payment.shares===0) {
+              continue;
+            }
+            var tr = $('<tr></tr>');
+            var td = $('<td></td>');
+            tr.append(td);
+            if (pooldata.config.txURL) {
+              var a = $('<a href="'+pooldata.config.txURL+payment.txid+'" title="View transaction" target="_blank" class="text-custom"></a>')
+              td.append(a);
+              td = a;
+            }
+            for (var i=0;i<payment.blocks.length;i++) {
+              td.append(payment.blocks[i]);
+              if (i < payment.blocks.length-1) {
+                td.append(',');
+              }
+            }
+            td = $('<td data-sort="'+payment.time+'">'+readableDate(payment.time)+'</td>');
+            tr.append(td);
+            td = $('<td>'+payment.miners+'</td>');
+            tr.append(td);
+            td = $('<td>'+payment.shares+'</td>');
+            tr.append(td);
+            td = $('<td>'+payment.paid+'</td>');
+            tr.append(td);
+            tr.appendTo(paymentsBody);
+          }
+          $('#minerCount').text(pooldata.pooldata.minerCount);
+          $('#workerCount').text(pooldata.pooldata.workerCount);
+          $('#sharesCount').text(pooldata.pooldata.shareCount.toFixed(4));
+
+          if (table !== undefined) {
+            table.destroy();
+          }
+          table = $('#paymentsTable').DataTable({
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+              [10, 25, 50, 100, -1],
+              [10, 25, 50, 100, "All"]
+            ],
+            "order": [[1, "desc"]],
+            responsive: false,
+            language: {
+              search: "_INPUT_",
+              searchPlaceholder: "Search payments",
+            }
+          });
+        }
+      }
+    });
+  }
+
+  var coinConfigCheck;
+  $(document).ready(function() {
+    coinConfigCheck = setInterval(() => {
+      if (coinConfigData !== undefined) {
+        clearInterval(coinConfigCheck);
+        updatePayments();
+      }
+    }, 200);
+  });
+  function updatePage() {
+    updatePayments();
+  }
+  console.log("payments.html v0.2.0");
+
+</script>
+<link rel="stylesheet" href="/assets/vendor/jquery-datatable/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="/assets/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css">
+<link rel="stylesheet" href="/assets/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css">
+<script src="/assets/js/plugins/jquery.dataTables.min.js"></script>
+
+<!--
+
+  v0.1.0 - initial version
+  v0.1.1 - removed responsive options from table for now
+  v0.2.0 - Updated to use Oculux dashboard
+
+--> 

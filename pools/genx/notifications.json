@@ -1,0 +1,12 @@
+{
+    "notifications":[
+        {
+            "id":1,
+            "title":"New Pool UI",
+            "message":"Welcome to the new look ZelLabs pool! Take a look around, get comfortable, and if you see something that's broken please let us know. @JeffVader",
+            "time":"",
+            "type":"info",
+            "icon":"fas fa-exclamation"
+        }
+    ]
+}
