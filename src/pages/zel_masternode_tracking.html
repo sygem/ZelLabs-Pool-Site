@@ -1,0 +1,62 @@
+<style>
+    .btn-small {
+        padding: 3px 3px;
+    }
+    #tracking_header {
+        display: inline;
+    }
+    #tracking_header div {
+        display: inline;
+    }
+    #tracking_header h4 {
+        display: inline;
+        vertical-align: middle!important;
+        margin-left: 10px;
+    }
+    .login {
+        float: right;
+        margin-right: 10px;
+    }
+    .loggedIn {
+        float: right;
+        margin-right: 10px;
+    }
+</style>
+
+<div class="container-fluid" style="display: flex; justify-content: flex-start;">
+    <div class="card card-plain">
+        <div class="row">
+            <div class="col-sm-12"> <!-- Header -->
+                <div class="card"> <!-- Pool Stats -->
+                    <div class="card-body" id="tracking_header">
+                        <div class="overview">
+                            <h4>Masternode status overview:</h4>
+                            <button type="button" class="btn btn-small btn-success">Online:</button>
+                            <span class="align-middle status-number">0</span>
+                            <button type="button" class="btn btn-small btn-warning">Warning:</button>
+                            <span class="align-middle">0</span>
+                            <button type="button" class="btn btn-small btn-danger">Offline:</button>
+                            <span class="align-middle">0</span>
+                        </div>
+                        <div class="login">
+                            <button type="button" class="btn btn-small btn-info" onclick="login()">Login</button>
+                            <button type="button" class="btn btn-small btn-info" onclick="register()">Register</button>
+                        </div>
+                        <div class="loggedIn d-none">
+                            <span class="align-middle">0021-5403-102105-0145</span>
+                            <button type="button" class="btn btn-small btn-info" onclick="logout()">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function register() {
+        alert("register");
+    }
+
+</script>

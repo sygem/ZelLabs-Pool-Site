@@ -1,0 +1,344 @@
+<style>
+
+.body.top_counter {
+  padding: 18px;
+}
+.body.top_counter .icon {
+  width: 45px;
+  height: 45px;
+}
+
+#graphHeader {
+  padding-bottom: 0px;
+}
+
+#graphControls {
+  top: -8px;
+}
+
+@media screen and (max-width: 380px) {
+  #graphHeader {
+    padding-bottom: 20px;
+  }
+  #graphControls {
+    top: 20px;
+  }
+
+}
+
+</style>
+<div class="container-fluid">
+  <div class="row clearfix" style="margin-top: 20px;">
+    <div class="col-xxxxl-4 col-xxxl-4 col-xxl-5 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"> <!-- Stats -->
+      <div class="row">
+        <div class="col-xxl-12 col-lg-6">
+          <div class="card" style="margin-bottom: 15px;">
+            <div class="body" style="padding: 11px;">
+              <div class="row">
+                <div class="col-5 text-center">
+                  <h5 class="mb-1 text-custom" id="poolHashrate"></h5>
+                  <div>Pool Hashrate</div>
+                </div>
+                <div class="col-2 text-center">
+                  <div class="card-value text-muted"><i class="zel-icon zel-icon-sitemap mx-auto"></i></div>
+                </div>
+                <div class="col-5 text-center">
+                  <h5 class="mb-1 text-custom" id="networkHashrate"></h5>
+                  <div>Network Hashrate</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xxl-12 col-lg-6">
+          <div class="card-wrapper flip-right">
+            <div class="card" style="height: 80px; margin-bottom: 15px;">
+              <div class="front body" style="padding: 11px;">
+                <div class="row">
+                  <div class="col-5 text-center">
+                    <h5 class="mb-1 text-custom" id="networkDiff"></h5>
+                    <div>Network Diff</div>
+                  </div>
+                  <div class="col-2 text-center">
+                    <div class="card-value text-muted"><i class="zel-icon zel-icon-line-chart mx-auto"></i></div>
+                  </div>
+                  <div class="col-5 text-center">
+                    <h5 class="mb-1 text-custom" id="networkBlockHeight"></h5>
+                    <div>Block Height</div>
+                  </div>
+                </div>
+              </div>
+              <div class="back bg-danger body text-light" style="padding: 11px;">
+                <div class="row">
+                  <div class="col-5 text-center">
+                    <h5 class="mb-1" id="networkConnections"></h5>
+                    <div>Connections</div>
+                  </div>
+                  <div class="col-2 text-center">
+                    <div class="card-value"><i class="zel-icon zel-icon-chain mx-auto"></i></div>
+                  </div>
+                  <div class="col-5 text-center">
+                    <h5 class="mb-1" id="networkVersion2"></h5>
+                    <div>Version</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xxl-12 col-lg-7">
+          <div class="card" style="margin-bottom: 0px;">
+            <div class="row">
+              <div class="col-xs-6 col-sm-6 col-lg-5 col-xl-5 col-xxl-6">
+                <div class="card" style="height: 90%;">
+                  <div class="body top_counter row" style="height: 100%; margin-left: 0px; margin-right: 0px; padding: 20px 5px 15px 5px;">
+                    <div class="col-xl-12 col-lg-12 col-sm-12 col-6">
+                      <div class="icon bg-success text-white"><i class="zel-icon zel-icon-hammer"></i> </div>
+                      <div class="content">
+                        <span>Miners</span>
+                        <h5 class="number mb-0 text-custom" id="poolMiners">...</h5>
+                      </div>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-sm-12 col-6">
+                      <div class="icon bg-info text-white"><i class="zel-icon zel-icon-desktop"></i> </div>
+                      <div class="content">
+                        <span>Workers</span>
+                        <h5 class="number mb-0 text-custom" id="poolWorkers">...</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-lg-7 col-xl-7 col-xxl-6">
+                  <div class="card" style="height: 90%;">
+                    <div class="p-1 px-1 body text-center" style="height: 100%;">
+                      <div class="m-t-15">
+                        <div>Pool Fee</div>
+                        <h4 class="text-custom" id="poolFee"></h4>
+                      </div>
+                      <div class="m-t-15">
+                        <div>Time To Find Block</div>
+                        <h4 id="poolLuck" class="text-custom">...</h4>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xxl-12 col-lg-5">
+          <div class="card" style="margin-bottom: 15px; height: 90%">
+            <div class="body" style="padding: 11px; height: 100%">
+              <div class="row">
+                <div class="col-xxl-0 col-lg-12 col-md-0 col-sm-0 col-xs-0" style="height: 10px;">
+                </div>
+                <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-4 col-sm-4 col-4 text-center">
+                  <h5 class="mb-1 text-custom" id="networkBlockReward">...</h5>
+                  <div>Block Reward</div>
+                </div>
+                <div class="col-xxl-4 col-xl-6 col-lg-6 col-md-4 col-sm-4 col-4 text-center">
+                  <div id="blocksFoundCarousel" class="carousel vert slide" data-ride="carousel" data-interval="8500">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <h5 class="mb-1 text-custom" id="poolBlocksFound">...</h5>
+                        <div>Blocks Found</div>
+                      </div>
+                      <div class="carousel-item">
+                        <h5 class="mb-1 text-custom" id="poolBlocksFound24hr">...</h5>
+                        <div>Blocks in 24hr</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xxl-0 col-lg-12 col-md-0 col-sm-0 col-xs-0" style="height: 10px;">
+                </div>
+                <div class="col-xxl-4 col-xl-12 col-lg-12 col-md-4 col-sm-4 col-4 text-center">
+                  <h5 class="mb-1 text-custom" id="currentPoolLuck">...</h5>
+                  <div>Current Effort</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- END stats -->
+    <div class="col-xxxxl-8 col-xxxl-8 col-xxl-7 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+      <div class="card hashrate-graph"> <!-- Hashrate Graph -->
+        <div class="header" id="hashrateGraphCard">
+          <h2 class="card-title" id="graphHeader">Hashrate Graph</h2>
+          <ul class="header-dropdown dropdown" id="graphControls">
+            <li class="dropdown">
+              <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Graph Functions
+              </a>
+              <ul class="dropdown-menu vivify fadeIn">
+                <li><a href="#" onclick="toggleGraphScrollbar();" class="">Toggle Range Selector</a></li>
+                <li><hr style="border-top: 2px solid;"></li>
+                <li><a href="#" onclick="recreateChart(86400);return false;" id="86400">Today</a></li>
+                <li><a href="#" onclick="recreateChart(604800);return false;" id="604800">Last 7 Days</a></li>
+                <li><a href="#" onclick="recreateChart(1209600);return false;" id="1209600">Last 14 Days</a></li>
+              </ul>
+            </li>
+            <li><a href="javascript:toggleGraphFullScreen();" class="full-screen" data-toggle="tooltip" data-title="Full-screen"><i title="Toggle Graph Full Screen" class="zel-icon zel-icon-arrows"></i></a></li>
+          </ul>
+        </div>
+        <div class="card-body" style="padding: 5px;">
+          <div id="hashrateLineChart" style="height: 402px;">
+          </div>
+        </div>
+      </div> <!-- /Hashrate Graph -->
+    </div>
+  </div>
+  <div class="row clearfix">
+    <div class="col-xxl-3 col-lg-12 col-md-12 col-sm-12"> <!-- Market Stats -->
+      <div class="row">
+        <div class="col-md-6 col-sm-6 col-xxl-12">
+          <div class="card invisible" id="marketStats"> <!-- Market Stats -->
+            <div class="header" id="marketStatsCard">
+              <h2 class="card-title">Market Stats</h2>
+            </div>
+            <div class="body table-responsive">
+              <table class="table table-striped">
+                <tbody>
+                  <tr>
+                    <td id="usdPrice">...</td>
+                    <td id="btcPrice">...</td>
+                  </tr>
+                  <tr>
+                    <td>1h Change</td>
+                    <td id="1hChange">...</td>
+                  </tr>
+                  <tr>
+                    <td>24h Change</td>
+                    <td id="24hChange">...</td>
+                  </tr>
+                  <tr>
+                    <td>24h Volume</td>
+                    <td id="24hVolUSD">...</td>
+                  </tr>
+                  <tr>
+                    <td>24h Volume</td>
+                    <td id="24hVolBTC">...</td>
+                  </tr>
+                  <tr>
+                    <td>Market Cap</td>
+                    <td id="marketCap">...</td>
+                  </tr>
+                  <tr>
+                    <td>Rank</td>
+                    <td id="marketCapRank">...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div> <!-- /Market Stats -->
+        </div>
+        <div class="col-md-6 col-sm-6 col-xxl-12">
+          <div class="card" id="effortGraph">
+            <div class="header">
+              <h2 class="card-title">Effort/Luck Stats</h2>
+            </div>
+            <div class="card-body">
+              <ul class="nav nav-tabs3" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#luckTable" data-toggle="tab" role="tablist" aria-expanded="true">Table</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#luckGraph" data-toggle="tab" role="tablist" aria-expanded="false">Graph</a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="luckTable" aria-expanded="true">
+                  <table class="table">
+                    <thead>
+                      <th>Blocks</th>
+                      <th>Effort</th>
+                      <th>Orphans</th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>64</td>
+                        <td><span id="effort64">-</span></td>
+                        <td><span id="orphan64">-</span></td>
+                      </tr>
+                      <tr>
+                        <td>128</td>
+                        <td><span id="effort128">-</span></td>
+                        <td><span id="orphan128">-</span></td>
+                      </tr>
+                      <tr>
+                        <td>256</td>
+                        <td><span id="effort256">-</span></td>
+                        <td><span id="orphan256">-</span></td>
+                      </tr>
+                      <tr>
+                        <td>512</td>
+                        <td><span id="effort512">-</span></td>
+                        <td><span id="orphan512">-</span></td>
+                      </tr>
+                      <tr>
+                        <td>1024</td>
+                        <td><span id="effort1024">-</span></td>
+                        <td><span id="orphan1024">-</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tab-pane" id="luckGraph">
+                  <div id="effortLineChart" style="height: 300px;">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xxl-9 col-lg-12" id="blocksColumn">
+      <div class="card"> <!-- Latest Blocks -->
+        <div class="header" id="blocksCard">
+          <h2 class="card-title">Latest Blocks</h2>
+          <ul class="header-dropdown dropdown">                                
+            <li><a href="javascript:void(0);" class="full-screen" data-toggle="tooltip" data-title="Full-screen"><i title="Toggle Blocks Full Screen" class="zel-icon zel-icon-arrows"></i></a></li>
+          </ul>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover table-custom spacing5 display nowrap">
+            <thead>
+              <tr>
+                <th>Block</th>
+                <th>Mined</th>
+                <th>Diff</th>
+                <th style="width:200px;">Mined By</th>
+                <th>Stratum</th>
+                <th>Effort</th>
+                <th>Luck</th>
+                <th>Confirmations</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id='blocksBody'>
+            </tbody>
+          </table>
+        </div>
+      </div> <!-- /Latest Blocks -->
+  
+    </div>
+  </div>
+</div>
+
+<!-- build:js /assets/js/pages/home.js -->
+<script src="/assets/js/plugins/color.js"></script>
+<script src="/assets/js/pages/home.js"></script>
+<!-- endbuild -->
+
+<!--
+  v0.1.0 - initial version
+  v0.1.1 - remove Shielding from blocks if coin doesn't support it
+  v0.2.0 - Updated to use Oculux dashboard
+  v0.2.1 - Changed the rotating stratum/miner display to use a tooltip instead
+  v0.2.2 - Enabled the stratum tooltip on more table columns
+  v0.2.3 - Improved small-screen display
+  v0.3.0 - New charting library - amCharts!
+--> 
