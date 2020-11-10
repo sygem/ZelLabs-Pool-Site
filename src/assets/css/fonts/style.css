@@ -1,0 +1,445 @@
+@font-face {
+  font-family: 'zellabs';
+  src:  url('/assets/fonts/zellabs.eot?gp46jh');
+  src:  url('/assets/fonts/zellabs.eot?gp46jh#iefix') format('embedded-opentype'),
+    url('/assets/fonts/zellabs.ttf?gp46jh') format('truetype'),
+    url('/assets/fonts/zellabs.woff?gp46jh') format('woff'),
+    url('/assets/fonts/zellabs.svg?gp46jh#zellabs') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.zel-icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'zellabs' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.zel-icon-bag:before {
+  content: "\e901";
+}
+.zel-icon-sack:before {
+  content: "\e901";
+}
+.zel-icon-money:before {
+  content: "\e901";
+}
+.zel-icon-stack:before {
+  content: "\e92e";
+}
+.zel-icon-credit-card1:before {
+  content: "\e93f";
+}
+.zel-icon-hammer:before {
+  content: "\e996";
+}
+.zel-icon-tree:before {
+  content: "\e9bc";
+}
+.zel-icon-hammer1:before {
+  content: "\e903";
+}
+.zel-icon-account_balance_wallet:before {
+  content: "\e904";
+}
+.zel-icon-discord:before {
+  content: "\e900";
+  color: #7289da;
+}
+.zel-icon-search:before {
+  content: "\f002";
+}
+.zel-icon-heart:before {
+  content: "\f004";
+}
+.zel-icon-star:before {
+  content: "\f005";
+}
+.zel-icon-star-o:before {
+  content: "\f006";
+}
+.zel-icon-th-large:before {
+  content: "\f009";
+}
+.zel-icon-th:before {
+  content: "\f00a";
+}
+.zel-icon-th-list:before {
+  content: "\f00b";
+}
+.zel-icon-close:before {
+  content: "\f00d";
+}
+.zel-icon-remove:before {
+  content: "\f00d";
+}
+.zel-icon-times:before {
+  content: "\f00d";
+}
+.zel-icon-cog:before {
+  content: "\f013";
+}
+.zel-icon-gear:before {
+  content: "\f013";
+}
+.zel-icon-home:before {
+  content: "\f015";
+}
+.zel-icon-download:before {
+  content: "\f019";
+}
+.zel-icon-lock:before {
+  content: "\f023";
+}
+.zel-icon-book:before {
+  content: "\f02d";
+}
+.zel-icon-list:before {
+  content: "\f03a";
+}
+.zel-icon-pencil:before {
+  content: "\f040";
+}
+.zel-icon-arrows:before {
+  content: "\f047";
+}
+.zel-icon-plus-circle:before {
+  content: "\f055";
+}
+.zel-icon-minus-circle:before {
+  content: "\f056";
+}
+.zel-icon-info-circle:before {
+  content: "\f05a";
+}
+.zel-icon-folder:before {
+  content: "\f07b";
+}
+.zel-icon-folder-open:before {
+  content: "\f07c";
+}
+.zel-icon-bar-chart:before {
+  content: "\f080";
+}
+.zel-icon-bar-chart-o:before {
+  content: "\f080";
+}
+.zel-icon-twitter-square:before {
+  content: "\f081";
+}
+.zel-icon-cogs:before {
+  content: "\f085";
+}
+.zel-icon-gears:before {
+  content: "\f085";
+}
+.zel-icon-comments:before {
+  content: "\f086";
+}
+.zel-icon-heart-o:before {
+  content: "\f08a";
+}
+.zel-icon-github-square:before {
+  content: "\f092";
+}
+.zel-icon-upload:before {
+  content: "\f093";
+}
+.zel-icon-twitter:before {
+  content: "\f099";
+}
+.zel-icon-github:before {
+  content: "\f09b";
+}
+.zel-icon-unlock:before {
+  content: "\f09c";
+}
+.zel-icon-credit-card:before {
+  content: "\f09d";
+}
+.zel-icon-hdd-o:before {
+  content: "\f0a0";
+}
+.zel-icon-bullhorn:before {
+  content: "\f0a1";
+}
+.zel-icon-bell-o:before {
+  content: "\f0a2";
+}
+.zel-icon-globe:before {
+  content: "\f0ac";
+}
+.zel-icon-wrench:before {
+  content: "\f0ad";
+}
+.zel-icon-tasks:before {
+  content: "\f0ae";
+}
+.zel-icon-briefcase:before {
+  content: "\f0b1";
+}
+.zel-icon-arrows-alt:before {
+  content: "\f0b2";
+}
+.zel-icon-group:before {
+  content: "\f0c0";
+}
+.zel-icon-users:before {
+  content: "\f0c0";
+}
+.zel-icon-chain:before {
+  content: "\f0c1";
+}
+.zel-icon-link:before {
+  content: "\f0c1";
+}
+.zel-icon-copy:before {
+  content: "\f0c5";
+}
+.zel-icon-files-o:before {
+  content: "\f0c5";
+}
+.zel-icon-bars:before {
+  content: "\f0c9";
+}
+.zel-icon-navicon:before {
+  content: "\f0c9";
+}
+.zel-icon-reorder:before {
+  content: "\f0c9";
+}
+.zel-icon-money2:before {
+  content: "\f0d6";
+}
+.zel-icon-gavel:before {
+  content: "\f0e3";
+}
+.zel-icon-legal:before {
+  content: "\f0e3";
+}
+.zel-icon-sitemap:before {
+  content: "\f0e8";
+}
+.zel-icon-bell:before {
+  content: "\f0f3";
+}
+.zel-icon-fighter-jet:before {
+  content: "\f0fb";
+}
+.zel-icon-desktop:before {
+  content: "\f108";
+}
+.zel-icon-laptop:before {
+  content: "\f109";
+}
+.zel-icon-tablet:before {
+  content: "\f10a";
+}
+.zel-icon-mobile:before {
+  content: "\f10b";
+}
+.zel-icon-mobile-phone:before {
+  content: "\f10b";
+}
+.zel-icon-github-alt:before {
+  content: "\f113";
+}
+.zel-icon-location-arrow:before {
+  content: "\f124";
+}
+.zel-icon-code-fork:before {
+  content: "\f126";
+}
+.zel-icon-shield:before {
+  content: "\f132";
+}
+.zel-icon-rocket:before {
+  content: "\f135";
+}
+.zel-icon-unlock-alt:before {
+  content: "\f13e";
+}
+.zel-icon-ticket:before {
+  content: "\f145";
+}
+.zel-icon-dollar:before {
+  content: "\f155";
+}
+.zel-icon-usd:before {
+  content: "\f155";
+}
+.zel-icon-bitcoin:before {
+  content: "\f15a";
+}
+.zel-icon-btc:before {
+  content: "\f15a";
+}
+.zel-icon-archive:before {
+  content: "\f187";
+}
+.zel-icon-slack:before {
+  content: "\f198";
+}
+.zel-icon-bank:before {
+  content: "\f19c";
+}
+.zel-icon-institution:before {
+  content: "\f19c";
+}
+.zel-icon-university:before {
+  content: "\f19c";
+}
+.zel-icon-cube:before {
+  content: "\f1b2";
+}
+.zel-icon-cubes:before {
+  content: "\f1b3";
+}
+.zel-icon-database:before {
+  content: "\f1c0";
+}
+.zel-icon-life-bouy:before {
+  content: "\f1cd";
+}
+.zel-icon-life-buoy:before {
+  content: "\f1cd";
+}
+.zel-icon-life-ring:before {
+  content: "\f1cd";
+}
+.zel-icon-life-saver:before {
+  content: "\f1cd";
+}
+.zel-icon-support:before {
+  content: "\f1cd";
+}
+.zel-icon-sliders:before {
+  content: "\f1de";
+}
+.zel-icon-share-alt:before {
+  content: "\f1e0";
+}
+.zel-icon-share-alt-square:before {
+  content: "\f1e1";
+}
+.zel-icon-newspaper-o:before {
+  content: "\f1ea";
+}
+.zel-icon-calculator:before {
+  content: "\f1ec";
+}
+.zel-icon-area-chart:before {
+  content: "\f1fe";
+}
+.zel-icon-pie-chart:before {
+  content: "\f200";
+}
+.zel-icon-line-chart:before {
+  content: "\f201";
+}
+.zel-icon-diamond:before {
+  content: "\f219";
+}
+.zel-icon-heartbeat:before {
+  content: "\f21e";
+}
+.zel-icon-server:before {
+  content: "\f233";
+}
+.zel-icon-clone:before {
+  content: "\f24d";
+}
+.zel-icon-television:before {
+  content: "\f26c";
+}
+.zel-icon-tv:before {
+  content: "\f26c";
+}
+.zel-icon-commenting:before {
+  content: "\f27a";
+}
+.zel-icon-commenting-o:before {
+  content: "\f27b";
+}
+.zel-icon-reddit-alien:before {
+  content: "\f281";
+}
+.zel-icon-credit-card-alt:before {
+  content: "\f283";
+}
+.zel-icon-mixcloud:before {
+  content: "\f289";
+}
+.zel-icon-handshake-o:before {
+  content: "\f2b5";
+}
+.zel-icon-user-circle-o:before {
+  content: "\f2be";
+}
+.zel-icon-telegram:before {
+  content: "\f2c6";
+}
+.zel-icon-times-rectangle:before {
+  content: "\f2d3";
+}
+.zel-icon-window-close:before {
+  content: "\f2d3";
+}
+.zel-icon-times-rectangle-o:before {
+  content: "\f2d4";
+}
+.zel-icon-window-close-o:before {
+  content: "\f2d4";
+}
+.zel-icon-microchip:before {
+  content: "\f2db";
+}
+.zel-icon-edit:before {
+  content: "\f044";
+}
+.zel-icon-pencil-square-o:before {
+  content: "\f044";
+}
+.zel-icon-comment:before {
+  content: "\f075";
+}
+.zel-icon-life-bouy1:before {
+  content: "\f1ce";
+}
+.zel-icon-life-buoy1:before {
+  content: "\f1ce";
+}
+.zel-icon-life-ring1:before {
+  content: "\f1ce";
+}
+.zel-icon-life-saver1:before {
+  content: "\f1ce";
+}
+.zel-icon-support1:before {
+  content: "\f1ce";
+}
+.zel-icon-commenting1:before {
+  content: "\f27c";
+}
+.zel-icon-envelope-open:before {
+  content: "\f2b6";
+}
+.zel-icon-address-card:before {
+  content: "\f2bb";
+}
+.zel-icon-vcard:before {
+  content: "\f2bb";
+}
+.zel-icon-user-circle-o1:before {
+  content: "\f2bf";
+}

@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Zel Labs</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Best-in-class Mining Pool for Equihash, MTP, X16Rv2 and more">
+    <meta name="keywords" content="mining, pool, mining pool, equihash, zel, zel.cash, bitcoin">
+    <meta name="author" content="JeffVader">
+    <meta name="theme-color" content="#ff7952">
+
+    <link rel="manifest" href="/manifest.webmanifest">
+
+    <link rel="icon" href="/assets/images/ZelLabs-Round.png" type="image/x-icon">
+    <!-- VENDOR CSS -->
+    <!-- build:css /assets/css/core.css -->
+    <link rel="stylesheet" href="/assets/css/core/bootstrap-4.4.1.min.css">
+    <link rel="stylesheet" href="/assets/css/core/bootstrap-xxl.css">
+    <link rel="stylesheet" href="/assets/css/fonts/style.css">
+    <link rel="stylesheet" href="/assets/vendor/animate-css/vivify.min.css">
+    <link rel="stylesheet" href="/assets/css/rangeslider/ion.rangeSlider.css">
+    <!-- endbuild -->
+
+    <!-- MAIN CSS -->
+    <!-- build:css /assets/css/pool.css -->
+    <link rel="stylesheet" href="/assets/css/site.css">
+    <link rel="stylesheet" href="/assets/css/site.custom.css">
+    <link rel="stylesheet" href="/assets/css/micromodal/micromodal.css">
+    <!-- endbuild -->
+
+    <link rel="stylesheet" href="/pools/{{=it.coin}}/poolCustom.css">
+</head>
+<script>
+    // Expose a bunch of variables from our templating system
+    let currentPage = '{{=it.selected}}';
+    let coin = '{{=it.coin}}';
+    let maxBlocks = '{{=it.maxBlocks}}';
+    let site = '{{=it.site}}';
+</script>
+
+<!-- build:js /assets/js/core.js -->
+<script src="/assets/js/plugins/hackTimer/HackTimer.js"></script>
+<script src="/assets/js/core/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/core/popper.min.js"></script>
+<script src="/assets/js/core/bootstrap-4.0.0.min.js"></script>
+<script src="/assets/js/plugins/ion.rangeSlider.js"></script>
+<script src="/assets/bundles/vendorscripts.js"></script>
+<script src="/assets/js/plugins/ssci-big.min.js"></script>
+<script src="/assets/js/plugins/circle-progress.min.js"></script>
+<script src="/assets/js/plugins/micromodal.min.js"></script>
+<script src="/assets/js/plugins/js.cookie.min.js"></script>
+<!-- endbuild -->
+<script src="/pools/{{=it.coin}}/poolConfig.js"></script>
+
+<!-- build:js /assets/js/pool.js -->
+<script src="/assets/js/aboutUs.js"></script>
+<script src="/assets/js/supportLinks.js"></script>
+<script src="/assets/js/poolUtils.js"></script>
+<!-- endbuild -->
+      
+<body class="theme-custom font-montserrat">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+        <div class="bar4"></div>
+        <div class="bar5"></div>
+    </div>
+</div>
+<!-- Theme Setting -->
+<div class="themesetting">
+    <a href="javascript:void(0);" class="theme_btn"><i title="Settings Menu" class="zel-icon zel-icon-cogs"></i></a>
+    <!--<div class="card theme_color">
+        <div class="header">
+            <h2>Theme Color</h2>
+        </div>
+        <ul class="choose-skin list-unstyled mb-0">
+            <li data-theme="custom" class="active"><div class="custom"></div></li>
+            <li data-theme="green"><div class="green"></div></li>
+            <li data-theme="orange"><div class="orange"></div></li>
+            <li data-theme="blush"><div class="blush"></div></li>
+            <li data-theme="cyan"><div class="cyan"></div></li>
+            <li data-theme="indigo"><div class="indigo"></div></li>
+            <li data-theme="red"><div class="red"></div></li>
+        </ul>
+    </div>-->
+    <!--<div class="card font_setting">
+        <div class="header">
+            <h2>Font Settings</h2>
+        </div>
+        <div>
+            <div class="fancy-radio mb-2">
+                <label><input name="font" value="font-krub" type="radio"><span><i></i>Krub Google font</span></label>
+            </div>
+            <div class="fancy-radio mb-2">
+                <label><input name="font" value="font-montserrat" type="radio" checked><span><i></i>Montserrat Google font</span></label>
+            </div>
+            <div class="fancy-radio">
+                <label><input name="font" value="font-roboto" type="radio"><span><i></i>Robot Google font</span></label>
+            </div>
+        </div>
+    </div>-->
+    <div class="card setting_switch">
+        <div class="header">
+            <h2>Settings</h2>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                Light Version
+                <div class="float-right">
+                    <label class="switch">
+                        <input type="checkbox" class="lv-btn">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </li>
+            <li class="list-group-item">
+                Mini Sidebar
+                <div class="float-right">
+                    <label class="switch">
+                        <input type="checkbox" class="mini-sidebar-btn">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </li>
+            <li class="list-group-item">
+              <label>
+                Contrast
+                <input type="text" id="contrastSlider" value="" />
+              </label>
+            </li>
+            <li class="list-group-item">
+                Auto Refresh
+                <div class="float-right">
+                    <label class="switch">
+                        <input type="checkbox" class="auto-refresh-btn">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+<div id="wrapper">
+    <nav class="navbar top-navbar">
+        <div class="container-fluid">
+
+            <div class="navbar-left">
+                <div class="navbar-btn">
+                    <a href="/" data-toggle="tooltip" data-placement="right" title="Powered by FOMO"><img src="/assets/images/ZelLabs-Round.png" alt="ZelLabs Logo" class="img-fluid logo"></a>
+                    <button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu zel-icon zel-icon-bars"></i></button>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="javascript:void(0);" onclick="startPoolList();" class="megamenu_toggle icon-menu" data-toggle="tooltip" data-placement="bottom" title="View All Pools">Pool List</a>
+                    </li>
+                    <li class="dropdown d-none" id="stratum-icon">
+                        <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                            Stratums
+                            <span class="notification-dot bg-green" id="stratum-badge">2</span>
+                        </a>
+                        <ul class="dropdown-menu right_chat email vivify fadeIn">
+                            <li class="header green">Zel Stratums</li>
+                            <li>
+                                <a href="javascript:void(0);">
+                                    <div class="media">
+                                        <div class="avtar-pic w35 bg-red"><span>US</span></div>
+                                        <div class="media-body">
+                                            <span class="name">us-zel.zellabs.net<small class="float-right text-muted">17:02</small></span>
+                                            <span class="message">Unable to connect</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);">
+                                    <div class="media">
+                                        <div class="avtar-pic w35 bg-green"><span>EU</span></div>
+                                        <div class="media-body">
+                                            <span class="name">eu-zel.zellabs.net <small class="float-right text-muted">16:55</small></span>
+                                            <span class="message">Connection OK</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+            </ul>
+            </div>
+            
+            <div id="poolHeader" onmouseenter="$('#header1').animate({opacity: 0});$('#header2').animate({opacity: 1});" onmouseleave="$('#header1').animate({opacity: 1});$('#header2').animate({opacity: 0});">
+                <h1 class="poolHeader1" id="header1"><b>zel</b>Labs<span id="white">pools</span></h1>
+                <h2 class="poolHeader2" id="header2">Made by miners - Designed for you</h2>
+            </div>
+
+            <div class="navbar-right">
+                <div class="refresh circle"></div>
+                <div id="navbar-menu">
+                    <ul class="nav navbar-nav">
+                        <li><a href="javascript:void(0);" class="right_toggle icon-menu" title="Twitter" style="color: #007bff!important;"><i class="zel-icon zel-icon-twitter" style="font-size:22px;"></i></a></li>
+                        <li><a href="javascript:void(0);" data-micromodal-trigger="favouritesModal" class="icon-menu" title="Favourites" style="color: #ce0056!important;"><i class="zel-icon zel-icon-heart"></i></a></li>
+                        <!--<li><a href="javascript:void(0);" data-toggle="modal" data-target="#favouritesModal" class="icon-menu" title="Favourites"><i class="zel-icon zel-icon-heart"></i></a></li>-->
+                        <li><a href="javascript:void(0);" class="search_toggle icon-menu" title="Search Result"><i class="zel-icon zel-icon-search"></i></a></li>
+                        <li class="dropdown" id="notification-icon">
+                            <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                <i class="zel-icon zel-icon-bell"></i>
+                                <span class="notification-dot bg-azura" id="notification-badge"></span>
+                            </a>
+                            <ul class="dropdown-menu feeds_widget vivify fadeIn" id="notification-list">
+                            </ul>
+                        </li>
+                        <li id="navbarCalculator"><a href="#" class="icon-menu sidebar-calculator" title="Calculator"><i class="zel-icon zel-icon-calculator p-r-25"></i></a></li>
+                        <!--<li><a href="javascript:void(0);" class="right_toggle icon-menu" title="Settings"><i class="icon-magic-wand"></i></a></li>-->
+                        <!--<li><label class="switch setting_switch"><input type="checkbox" class="lv-btn"><span class="slider round"></span></input></label></li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="progress-container"><div class="progress-bar" id="myBar"></div></div>
+    </nav>
+    <div class="search_div">
+        <div class="card">
+            <div class="body">
+                <form id="navbar-search" class="navbar-form search-form">
+                    <div class="input-group mb-0">
+                        <input type="text" class="form-control" id="miner-search" placeholder="Search...">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="zel-icon zel-icon-search"></i></span>
+                            <a href="javascript:void(0);" class="search_toggle btn btn-danger"><i title="Search Menu" class="zel-icon zel-icon-close"></i></a>
+                        </div>
+                    </div>
+                </form>
+            </div>            
+        </div>
+        <span>Search Result <small class="float-right text-muted" id='live-search-result'></small></span>
+        <div class="table-responsive">
+            <table class="table table-hover table-custom spacing5">
+                <tbody id="search-results">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="megamenu" class="megamenu particles_js">
+        <a href="javascript:void(0);" onclick="stopPoolList();" class="megamenu_toggle btn btn-danger"><i title="Pool List" class="zel-icon zel-icon-close"></i></a>
+        <div class="container">
+            <div class="row clearfix">
+                <div id="mega-pool-list"></div>
+            </div>
+        </div>
+        <div id="particles-js"></div>
+    </div>
+    <div id="rightbar" class="rightbar">
+      <div class="body">
+        <hr>
+        <a class="twitter-timeline" href="https://twitter.com/Zel_Labs?ref_src=twsrc%5Etfw">Tweets by Zel_Labs</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </div>
+    </div>
+    <div id="left-sidebar" class="sidebar">
+        <div class="navbar-brand">
+            <a href="/" data-toggle="tooltip" title="Powered by FOMO" data-placement="right"><img src="/assets/images/ZelLabs-Round.png" alt="Zel Logo" class="img-fluid logo"><span>ZEL LABS</span></a>
+            <button type="button" class="btn-toggle-offcanvas btn btn-sm float-right"><i class="lnr lnr-menu zel-icon zel-icon-close"></i></button>
+        </div>
+        <div class="sidebar-scroll">
+            <div id="left-sidebar-links">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="javascript:void(0);" class="megamenu_toggle_sidebar icon-menu" data-toggle="tooltip" data-placement="bottom" title="View All Pools">Pool List</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="coin-logo" id="coin-logo">
+                <a href="" class="simple-text coin-logo-large">
+                    <img src="" alt="Coin Logo" class="mx-auto">
+                </a>
+            </div>
+            <nav id="left-sidebar-nav" class="sidebar-nav">
+                <ul id="main-menu" class="metismenu">
+                    <li class="header">Pool</li>
+                    <li class="{{? it.selected === '' }}active{{?}}"><a href="/coins/{{=it.coin}}"><i class="zel-icon zel-icon-home"></i><span>Dashboard</span></a></li>
+                    <li class="{{? it.selected === 'getting_started' }}active{{?}}"><a href="#" data-micromodal-trigger="gettingStartedModal" ><i class="zel-icon zel-icon-rocket"></i><span>Getting Started</span></a></li>
+                    <li class="{{? it.selected === 'workers' }}active{{?}}"><a href="/coins/{{=it.coin}}/workers"><i class="zel-icon zel-icon-hammer"></i><span>Miners</span></a></li>
+                    <li class="{{? it.selected === 'payments' }}active{{?}}"><a href="/coins/{{=it.coin}}/payments"><i class="zel-icon zel-icon-account_balance_wallet"></i><span>Payments</span></a></li>
+                    <li id="extra-menu-items" class="header"></li>
+                    <li class="header">Extras</li>
+                    <li id="toolsItem">
+                        <a href="#Tools" class="has-arrow"><i class="zel-icon zel-icon-briefcase"></i><span>Tools</span></a>
+                        <ul id="toolsChildren">
+                            <li id="sidebarCalculator"><a href='#' class="sidebar-calculator">Calculator</a></li>
+                        </ul>
+                    </li>
+                    <li id="support-menu-items" class="header"></li>
+                </ul>
+            </nav>     
+        </div>
+        <div class="about-us align-bottom">
+            <div id="adverts" class="carousel slide" data-ride="carousel" data-interval="12000">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <a href="https://zel.network/project/zelcore/" target="_blank" data-toggle="tooltip" title="ZelCore" data-placement="right"><img src="/assets/images/banners/ZelLabs_Pool_ad_v2.png" alt="ZelCore" class="img-fluid ad"></a>
+                    </div>
+                    <div class="carousel-item">
+                        <a href="https://os.hashr8.com" target="_blank" data-toggle="tooltip" title="Hashr8" data-placement="right"><img src="/assets/images/banners/Hashr8_OS_Ad_220x220.png" alt="Hashr8" class="img-fluid ad"></a>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-custom btn-sm" data-micromodal-trigger="aboutUsModal" id="aboutUs">About Us</button>
+        </div>
+    </div>
+    <div id="main-content">
+        {{=it.page}}
+        <footer class="footer">
+          <div class="container-fluid">
+            <div class="copyright float-right">
+              <p id='footer'>
+                <script>
+                  insertFooter();
+                </script>
+              </p>
+
+            </div>
+          </div>
+        </footer>
+    </div>    
+    <!--<div class="modal fade" id="aboutUsModal" tabindex="-1" role="dialog" aria-labelledby="aboutUsModalTitle" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aboutUsModalTitle">About The Teams</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs3" role="tablist" id="aboutUsNavPills">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#fomoTeam" role="tablist" aria-expanded="true">
+                            FOMO Ops
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#zelTeam" role="tablist" aria-expanded="false">
+                            Zel Labs
+                            </a>
+                        </li>
+                        <li class="nav-item" id="coinTeamButton">
+                            <a class="nav-link" data-toggle="tab" href="#coinTeam" role="tablist" aria-expanded="false"></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content tab-space">
+                        <div class="tab-pane active" role="tabpanel" id="fomoTeam" aria-expanded="true">
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="zelTeam" aria-expanded="true">
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="coinTeam" aria-expanded="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <div class="mmodal micromodal-slide" id="aboutUsModal" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="modal__container modal-lg" role="dialog" aria-modal="true" aria-labelledby="aboutUsModalTitle">
+                <header class="modal__header">
+                    <h2 class="modal__title" id="aboutUsModalTitle">
+                        About The Teams
+                    </h2>
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                </header>
+                <main class="modal__content">
+                    <ul class="nav nav-tabs3" role="tablist" id="aboutUsNavPills">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#fomoTeam" role="tablist" aria-expanded="true">
+                            FOMO Ops
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#zelTeam" role="tablist" aria-expanded="false">
+                            Zel Labs
+                            </a>
+                        </li>
+                        <li class="nav-item" id="coinTeamButton">
+                            <a class="nav-link" data-toggle="tab" href="#coinTeam" role="tablist" aria-expanded="false"></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content tab-space">
+                        <div class="tab-pane active" role="tabpanel" id="fomoTeam" aria-expanded="true">
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="zelTeam" aria-expanded="true">
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="coinTeam" aria-expanded="true">
+                        </div>
+                    </div>
+                </main>
+                <!--<footer class="modal__footer">
+                    <button class="modal__btn modal__btn-primary">Continue</button>
+                    <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
+                </footer>-->
+            </div>
+        </div>
+    </div>
+
+    <div class="mmodal micromodal-slide" id="favouritesModal" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+          <div class="modal__container modal-lg" role="dialog" aria-modal="true" aria-labelledby="favouritesModalTitle">
+            <header class="modal__header">
+              <h2 class="modal__title" id="favouritesModalTitle">
+                Favourites
+              </h2>
+              <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+            </header>
+            <main class="modal__content" id="favourites">
+                <ul style="list-style-type: none;">
+
+                </ul>
+            </main>
+            <!--<footer class="modal__footer">
+              <button class="modal__btn modal__btn-primary">Continue</button>
+              <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
+            </footer>-->
+          </div>
+        </div>
+      </div>
+
+      <div class="mmodal micromodal-slide" id="gettingStartedModal" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="modal__container modal-lg" role="dialog" aria-modal="true" aria-labelledby="gettingStartedModalTitle">
+                <header class="modal__header">
+                    <h2 class="modal__title" id="gettingStartedModalTitle">
+                        Getting Started
+                    </h2>
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                </header>
+                <main class="modal__content">
+                    <ul class="nav nav-tabs3" role="tablist">
+                        <li class="nav-item">
+                          <a class="nav-link active" data-toggle="tab" href="#basicConnection" role="tablist" aria-expanded="true">
+                            Basic Information
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" data-toggle="tab" href="#configGenerator" role="tablist" aria-expanded="false">
+                            Miner Config Generator
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" data-toggle="tab" href="#wallets" role="tablist" aria-expanded="false" id="walletsTab">
+                            Wallets
+                          </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content tab-space">
+                        <div class="tab-pane active" role="tabpanel" id="basicConnection" aria-expanded="true">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="table-responsive">
+                                <table class="table" id="defaultStratum">
+                                  <thead class="text-custom">
+                                    <th>Server:Port</th>
+                                    <th>Diff</th>
+                                  </thead>
+                                  <tbody id="basicConnectionTable">
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <h5>Custom Payouts</h5>
+                              <p style="font-size: 14px;">Set your miner password to <br>'minpayout=&lt;NUMBER&gt;' <br>to set the amount needed to trigger a payment. Set this on ALL of your rigs.</p>
+                              <br>
+                              <h5>Compatible GPU Miners</h5>
+                              <h6 style="font-weight: 400; font-size: 12px;">&nbsp;&nbsp;&nbsp;Download one of these miners for your GPU</h6>
+                              <ul id="supportedMiners">
+                              </ul>
+                              <br>
+                              <h5>Algorithm: <span class="text-custom" id="algorithm"></span></h5>
+                              <h5 id="persHeader">Personalization String: <span class="text-custom" id="persString"></span></h5>
+          
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="configGenerator" aria-expanded="false">
+                          <table class="table">
+                              <thead>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>Port</td>
+                                  <td>
+                                    <ul class="nav nav-tabs2" role="tablist" id="portSelector" id="generatorPort">
+                                    </ul>
+                                  </td>
+                                </tr>
+          
+                                <tr>
+                                    <td rel="tooltip" title="Enter your wallet address here">Address<small><sup>*</sup></small></td>
+                                    <td><input style="width:100%;" type="text" id="workerAddress" oninput="generateMinerConfig();" rel="tooltip" title="Enter your wallet address here"/></td>
+                                </tr>
+          
+                                <tr>
+                                    <td rel="tooltip" title="(Optional) Enter the name of your rig here">Name</td>
+                                    <td><input style="width:100%;" type="text" id="workerName" oninput="generateMinerConfig();" rel="tooltip" title="(Optional) Enter the name of your rig here"/></td>
+                                </tr>
+          
+                                <tr>
+                                    <td rel="tooltip" title="(Optional) Use 'minpayout=' followed by a number to alter the minimum amount needed to trigger a payout.">Password</td>
+                                    <td><input style="width:100%;" type="text" id="workerPassword" oninput="generateMinerConfig();" rel="tooltip" title="(Optional) Use 'minpayout=' followed by a number to alter the minimum amount needed to trigger a payout."/></td>
+                                </tr>
+          
+                                <tr>
+                                  <td>Software</td>
+                                  <td>
+                                    <ul class="nav nav-tabs2" role="tablist" id="generatorSoftware">
+                                    </ul>
+                                  </td>
+                                </tr>
+          
+                                <tr>
+                                  <td>Platform</td>
+                                  <td>
+                                    <ul class="nav nav-tabs2" role="tablist" id="generatorPlatform">
+                                      <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist" aria-expanded="true" onclick="setTimeout(function() {generateMinerConfig();},10);">Windows</a>
+                                      </li>
+                                      <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#link2" role="tablist" aria-expanded="false" onclick="setTimeout(function() {generateMinerConfig();},10);">Linux</a>
+                                      </li>
+                                    </ul>
+                                  </td>
+                                </tr>
+                              </tbody>
+                          </table>
+                          <div id="generatorResult">
+                          </div>
+                          <input class='copyfrom' tabindex='-1' aria-hidden='true' style="position: absolute; left: -9999px;">
+                          <button type="button" class="btn btn-custom float-right" style="padding: 12px 20px;" id="copyButton" onclick="copyToClipboard()">
+                            <i class="zel-icon zel-icon-copy" style="font-size: 16px;"></i>&nbsp;Copy
+                          </button>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="wallets" aria-expanded="false">
+                        </div>
+                    </div>
+                </main>
+                <footer class="modal__footer">
+                    <button class="btn btn-custom" data-micromodal-close aria-label="Close this dialog window">Close</button>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Javascript -->
+<script>
+    loadCoinConfig('{{=it.site}}');
+</script>
+
+<!-- build:js /assets/js/amCharts.js -->
+<script src="/assets/js/plugins/amCharts/core.js"></script>
+<script src="/assets/js/plugins/amCharts/charts.js"></script>
+<script src="/assets/js/plugins/amCharts/animated.js"></script>
+<!-- endbuild -->
+
+<!-- build:js /assets/js/core2.js -->
+<script src="/assets/js/index.js"></script>
+<!-- endbuild -->
+
+<script>
+    loadNotifications();
+    log("index.html vPOOL_VERSION");
+</script>
+</body>
+</html>
+
+<!--
+
+  v0.1.0 - initial version
+  v0.1.1 - move data-background-color from .wrapper to <body>
+  v0.2.0 - Updated to use Oculux dashboard
+  v0.2.1 - Optimized Fonts
+  v0.2.2 - Slide-out settings menu
+  v0.3.0 - New charting library - amCharts!
+  v0.3.1 - Twitter feed & Favourites
+--> 
