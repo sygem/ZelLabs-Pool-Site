@@ -1,0 +1,183 @@
+/**************************\
+  Basic Modal Styles
+\**************************/
+
+  .mmodal {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .modal__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: block;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+  
+  .modal__container {
+    background-color: #282b2f;
+    background: #282b2f;
+    max-height: 95vh;
+    box-sizing: border-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3rem;
+    outline: 0;
+    margin: 1.75rem auto;
+    position: relative;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal__header {
+    border-color: #2f3338;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #dee2e6;
+    border-top-left-radius: calc(.3rem - 1px);
+    border-top-right-radius: calc(.3rem - 1px);
+    justify-content: space-between;
+    padding: 1rem 1rem;
+    border-color: rgb(47, 51, 56);
+  }
+  
+  .modal__title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.5;
+    box-sizing: border-box;
+  }
+  
+  .modal__close {
+    background: transparent;
+    border: 0;
+    text-shadow: none;
+    color: #E15858
+  }
+  
+  .modal__header .modal__close:before { content: "\2715"; }
+  
+  .modal__content {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+    flex: 1 1 auto;
+    padding: 1rem;
+    position: relative;
+  }
+  
+  .modal__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0.75rem;
+    border-top: 1px solid rgb(47, 51, 56);
+    border-bottom-right-radius: calc(.3rem - 1px);
+    border-bottom-left-radius: calc(.3rem - 1px);
+  }
+
+  .modal__btn {
+    font-size: .875rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    background-color: #e6e6e6;
+    color: rgba(0,0,0,.8);
+    border-radius: .25rem;
+    border-style: none;
+    border-width: 0;
+    cursor: pointer;
+    -webkit-appearance: button;
+    text-transform: none;
+    overflow: visible;
+    line-height: 1.15;
+    margin: 0;
+    will-change: transform;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    transition: -webkit-transform .25s ease-out;
+    transition: transform .25s ease-out;
+    transition: transform .25s ease-out,-webkit-transform .25s ease-out;
+  }
+  
+  .modal__btn:focus, .modal__btn:hover {
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+  
+  .modal__btn-primary {
+    background-color: #00449e;
+    color: #fff;
+  }
+  
+  
+  
+  /**************************\
+    Demo Animation Style
+  \**************************/
+  @keyframes mmfadeIn {
+      from { opacity: 0; }
+        to { opacity: 1; }
+  }
+  
+  @keyframes mmfadeOut {
+      from { opacity: 1; }
+        to { opacity: 0; }
+  }
+  
+  @keyframes mmslideIn {
+    from { transform: translateY(40vh); }
+      to { transform: translateY(0); }
+  }
+  
+  @keyframes mmslideOut {
+      from { transform: translateY(0); }
+      to { transform: translateY(40vh); }
+  }
+  
+  .micromodal-slide {
+    display: none;
+  }
+  
+  .micromodal-slide.is-open {
+    display: block;
+  }
+  
+  .micromodal-slide[aria-hidden="false"] .modal__overlay {
+    animation: mmfadeIn .5s cubic-bezier(0.0, 0.0, 0.2, 1);
+  }
+  
+  .micromodal-slide[aria-hidden="false"] .modal__container {
+    animation: mmslideIn .5s cubic-bezier(0, 0, .2, 1);
+    animation-fill-mode: forwards;
+  }
+  
+  .micromodal-slide[aria-hidden="true"] .modal__overlay {
+    animation: mmfadeOut .5s cubic-bezier(0.0, 0.0, 0.2, 1);
+  }
+  
+  .micromodal-slide[aria-hidden="true"] .modal__container {
+    animation: mmslideOut .5s cubic-bezier(0, 0, .2, 1);
+    animation-fill-mode: forwards;
+  }
+  
+  .micromodal-slide .modal__container,
+  .micromodal-slide .modal__overlay {
+    will-change: transform;
+  }
