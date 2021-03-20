@@ -1130,7 +1130,7 @@ const pSBC=(p,c0,c1,l)=>{
 }
 
 function insertFooter() {
-  document.getElementById('footer').insertAdjacentHTML('afterend','&copy;'+new Date().getFullYear()+' zellabs.net - Powered by <a href="https://zel.network/" target="_blank" rel="noopener" class="text-custom">ZEL</a>');
+  document.getElementById('footer').insertAdjacentHTML('afterend','&copy;'+new Date().getFullYear()+' zellabs.net - Powered by <a href="https://zel.network/" target="_blank" rel="noopener" class="text-custom">Flux</a>');
 }
 
 function getBooleanCookieValue(name, defaultValue) {

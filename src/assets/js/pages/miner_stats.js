@@ -656,6 +656,7 @@
         if (networkSols !== -1) {
           updateMinerTTF(networkSols, stats.totalHash)
         } else {
+          log("Setting minerSols to "+stats.totalHash);
           minerSols = stats.totalHash;
         }
 
