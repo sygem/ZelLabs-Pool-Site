@@ -1,0 +1,498 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+   
+<style>
+
+.leaflet-fade-anim .leaflet-tile {
+    will-change: initial;
+}
+
+.leaflet-tile-container img {
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.mn-card-progress>.card-header.card-header-icon {
+    margin-right: 0px;
+  }
+
+  .mn-card-progress .progress {
+    width: calc(100% - 92px);
+    margin-left: 92px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    position: absolute;
+    border-radius: 0px;
+    height: 5px;
+    display: flex;
+  }
+
+  .mn-card-progress-spacer {
+    height: 12px;
+  }
+
+  #locations .progress {
+    height: 5px;
+    border-radius: 0px;
+  }
+
+  #locations .badge {
+    padding: 5px;
+    border-radius: 50px;
+  }
+
+  #locations {
+    max-height: 333px;
+  }
+
+  #locations .card-body {
+    text-align: left;
+    padding: 0px 10px;
+  }
+
+  #locations .table {
+    margin-bottom: 0px;
+  }
+
+  #locations .table td {
+    padding: 4px 5px;
+  }
+
+  #locations .progress {
+    background: #444;
+  }
+  body.light_version #locations .progress {
+    background: #ddd;
+  }
+
+</style>
+  <div class="container-fluid" style="display: flex; justify-content: flex-start;">
+    <div class="card card-plain">
+        <div class="row" style="margin-top: 15px;"> <!-- Masternode map & statistics -->
+          <div class="col-xxl-3 col-md-4 col-sm-6 col-xs-12">
+            <div class="card">
+              <div class="body">
+                <div class="row text-center">
+                  <div class="col-12">
+                    <label class="mb=0">Total Masternodes</label>
+                    <h4 class="font-30 font-weight-bold text-custom" id="masternodeCount">...</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="body">
+                  <div class="form-group">
+                      <label class="d-block">ENABLED (<span class="text-custom" id="enabled">...</span>) <span class="float-right" id="enabledPercent"></span></label>
+                      <div class="progress progress-xxs">
+                          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;" id="enabledProgress"></div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="d-block">SENTINEL_PING_EXPIRED (<span class="text-custom" id="sentinelPingExpired">...</span>) <span class="float-right" id="sentinelPercent"></span></label>
+                      <div class="progress progress-xxs">
+                          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;" id="sentinelProgress"></div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="d-block">NEW_START_REQUIRED (<span class="text-custom" id="newStartRequired">...</span>) <span class="float-right" id="newStartPercent"></span></label>
+                      <div class="progress progress-xxs">
+                          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;" id="newStartProgress"></div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="body top_counter">
+                <div class="icon bg-success text-white"><i class="fas fa-wallet"></i> </div>
+                  <div class="content">
+                    <span>Coin Supply</span>
+                  <h5 class="number mb-0 text-custom" id="supply"></h5>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xxl-6 col-md-8 col-sm-6 col-xs-12" style="z-index: 0;">
+            <div id="mapid" style="height: 458px; padding: 20px;"></div>
+          </div>
+          <div class="col-xxl-3 col-md-12 col-sm-12 col-xs-12">
+            <div id="locations" class="card">
+              <div class="body" style="height: 458px;">
+                <ul class="nav nav-tabs3" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#cityTable" data-toggle="tab" role="tablist" aria-expanded="true">Cities</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#countryTable" data-toggle="tab" role="tablist" aria-expanded="false">Countries</a>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="cityTable" aria-expanded="true">
+                    <table class="table">
+                      <thead>
+                        <td>#</td>
+                        <td>Location</td>
+                        <td width="40%">Percentage</td>
+                        <td></td>
+                      </thead>
+                      <tbody id="locationsTable">
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="tab-pane" id="countryTable" aria-expanded="false">
+                    <table class="table">
+                      <thead>
+                        <td>#</td>
+                        <td>Location</td>
+                        <td width="40%">Percentage</td>
+                        <td></td>
+                      </thead>
+                      <tbody id="countriesTable">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row clearfix m-t-15">
+          <div class="col-lg-4 col-sm-6 col-xs-12"> <!-- Coin Supply Pie Chart -->
+            <div id="supplyChart"></div>
+          </div>
+          <div class="col-lg-8 col-xs-12"> <!-- Coin Supply Details -->
+            <div class="row">
+              <div class="col-xxl-4 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                  <div class="body top_counter">
+                    <div class="d-flex align-items-center">
+                      <div class="icon bg-warning text-white"><i class="fas fa-dollar-sign"></i></div>
+                      <div class="content">
+                        <span>Masternode Cost</span>
+                        <h5 class="number mb-0 text-custom" id="mnPrice"></h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xxl-4 col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                  <div class="body top_counter">
+                      <div class="icon bg-info text-white"><i class="fas fa-money-bill"></i> </div>
+                      <div class="content">
+                          <span>Market Cap</span>
+                          <h5 class="number mb-0 text-custom" id="marketCap"></h5>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xxl-4 col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                  <div class="card">
+                    <div class="body top_counter">
+                        <div class="icon bg-danger text-white"><i class="fas fa-chart-line"></i> </div>
+                        <div class="content">
+                            <span>24hr Volume</span>
+                            <h5 class="number mb-0 text-custom" id="24hrVolume"></h5>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-md-12"> 
+                <div class="card">
+                  <div class="body">
+                    <div class="row clearfix">
+                      <div class="col-md-5 col-sm-12">
+                        <h4 class="m-b-0">Coins Locked</h4>
+                      </div>
+                      <div class="col-md-7 col-sm-12 text-right">
+                        <h2 class="m-b-0 text-custom" id="coinsLocked">...</h2>
+                        <small class="info" id="coinsLockedPercentage"></small>
+                      </div>
+                      <div class="col-12">                                    
+                        <div class="progress progress-xxs progress-transparent custom-color-blue mb-0 mt-3">
+                          <div class="progress-bar" id="coinsLockedProgress" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-12"> 
+                <div class="card">
+                  <div class="body">
+                    <div class="row clearfix">
+                      <div class="col-4">
+                        <h4 class="m-b-0">Coin Price</h4>
+                      </div>
+                      <div class="col-8 text-right">
+                        <h2 class="m-b-0 text-custom" id="dollarPrice">...</h2>
+                        <small class="info" id="coinValueChangePercentage"></small>
+                      </div>
+                      <div class="col-12">                                    
+                        <div class="progress progress-xxs progress-transparent custom-color-blue mb-0 mt-3">
+                          <div class="progress-bar" id="coinValueChangeProgress" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+ <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+   integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+   crossorigin=""></script>
+<script src="/assets/js/plugins/leaflet-nogap.js"></script>
+<script>
+
+  var supplyChart;
+  var lockedCoins = 0;
+  var supply = 0;
+  var numMasternodes = 0;
+  var map;
+  var markers = new L.FeatureGroup();
+
+  $(document).ready(function() {
+    map = L.map('mapid').setView([20,0], 2);
+    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+        attribution:
+            '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+        maxZoom: 18
+    }).addTo(map);
+    map.addLayer(markers);
+    updateStats();
+  });
+  function updateStats() {
+    $.ajax({
+      Method: 'GET',
+      url: 'https://dev.fomominers.com/genx/list',
+      dataType: 'json',
+      success: function (data) {
+        var newStart = 0;
+        numMasternodes = 0;
+        var enabled = 0;
+        var pingExpired = 0;
+        for (var i in data) {
+          var mn = data[i];
+          //console.log(mn);
+          if (mn.status === "NEW_START_REQUIRED") {
+            newStart++;
+          } else if (mn.status === "ENABLED") {
+            enabled++;
+          } else if (mn.status === "SENTINEL_PING_EXPIRED") {
+            pingExpired++;
+          }
+          numMasternodes++;
+        }
+        $('#masternodeCount').text(numMasternodes);
+
+        $('#enabled').text(enabled);
+        $('#enabledPercent').text((enabled/numMasternodes*100).toFixed(1)+'%');
+        $('#enabledProgress').css('width', (enabled/numMasternodes*100)+'%');
+
+        $('#sentinelPingExpired').text(pingExpired);
+        $('#sentinelPercent').text((pingExpired/numMasternodes*100).toFixed(1)+'%');
+        $('#sentinelProgress').css('width', (pingExpired/numMasternodes*100)+'%');
+
+        $('#newStartRequired').text(newStart);
+        $('#newStartPercent').text((newStart/numMasternodes*100).toFixed(1)+'%');
+        $('#newStartProgress').css('width', (newStart/numMasternodes*100)+'%');
+
+        lockedCoins = (750000*numMasternodes);
+        $('#coinsLocked').text(lockedCoins.toLocaleString());
+        updateSupplyChart();
+        updateLocations();
+        updateCoinsLockedPercentage();
+      }
+    });
+    $.ajax({
+      Method: 'GET',
+      url: 'https://api.coingecko.com/api/v3/coins/genesis-network?tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false',
+      dataType: 'json',
+      success: function (data) {
+        //console.log(data);
+        if ('market_data' in data) {
+          var ticker = data['market_data']['current_price'];
+          var volume = data['market_data']['total_volume'];
+          $('#dollarPrice').text('$'+ticker['usd']);
+          $('#mnPrice').text('$'+Number((ticker['usd']*750000).toFixed(2)).toLocaleString());
+          $('#24hrVolume').text('$'+volume['usd'].toFixed(2));
+          $('#marketCap').text('$'+Number((data['market_data'].market_cap.usd.toFixed(0))).toLocaleString());
+          supply = Number(data['market_data'].circulating_supply.toFixed(0));
+          $('#supply').text(supply.toLocaleString());
+          updateSupplyChart();
+          updateCoinsLockedPercentage();
+          var priceChange = data['market_data']['price_change_percentage_24h'];
+          $('#coinValueChangePercentage').text(priceChange.toFixed(1)+'% '+(priceChange < 0 ? 'decrease' : 'increase')+' since yesterday');
+          $('#coinValueChangeProgress').css('width',Math.abs(priceChange)+'%').css('background-color',(priceChange < 0 ? '#f00' : '#0f0'));
+        }
+      }
+    });
+
+
+  }
+
+  function updateCoinsLockedPercentage() {
+    if (supply > 0 && lockedCoins > 0) {
+      var percentageLocked = ((lockedCoins / supply) * 100).toFixed(1);
+      $('#coinsLockedPercentage').text(percentageLocked+'% Supply Locked');
+      $('#coinsLockedProgress').css('width', percentageLocked+'%');
+    }
+  }
+
+
+  function updateLocations() {
+    $.ajax({
+      Method: 'GET',
+      url: 'https://genx.sygem.com/api/masternode/locations',
+      dataType: 'json',
+      success: function (data) {
+        markers.clearLayers();
+        var tempCities = [];
+        var tempCountries = [];
+        for (var i in data.locations) {
+          var location = data.locations[i];
+          if (location.city !== null) {
+            var city = tempCities[location.city] || {};
+            city.name = location.city;
+            city.latitude = location.latitude;
+            city.longitude = location.longitude;
+            city.count = (city.count || 0) + 1;
+            tempCities[location.city] = city;
+          }
+
+          var country = tempCountries[location.country] || {};
+          country.name = location.country;
+          country.latitude = location.latitude;
+          country.longitude = location.longitude;
+          country.count = (country.count || 0) + 1;
+          tempCountries[location.country] = country;
+        }
+
+        var maxCityCount = 0;
+        var cities = [];
+        var countries = [];
+        for (var i in tempCities) {
+          var city = tempCities[i];
+          if (city.count > maxCityCount) maxCityCount = city.count;
+          cities.push(city);
+        }
+        for (var i in tempCountries) {
+          var country = tempCountries[i];
+          countries.push(country);
+        }
+        for (var i in cities) {
+          var city = cities[i];
+          var minSize = 5;
+          var maxSize = 20;
+          var size = ((city.count / maxCityCount) * (maxSize-minSize)) + minSize;
+          var marker = L.circleMarker([city.latitude, city.longitude], {radius: size});
+          marker.bindPopup("<p>"+city.name+": "+city.count+"</p>", {
+            showOnMouseOver: true
+          });
+          markers.addLayer(marker);
+        }
+        cities.sort(compareValues('count', 'desc'));
+        countries.sort(compareValues('count', 'desc'));
+        var count = 0;
+        var locationsTable = $('#locationsTable');
+        locationsTable.empty();
+        for (var i in cities) {
+          count++;
+          var percentage = (cities[i].count / numMasternodes) * 100;
+          var progress = '<div class="progress"><div class="progress-bar" role="progressbar" style="width: '+percentage+'%" aria-valuenow="'+percentage+'" aria-valuemin="0" aria-valuemax="100"></div></div>';
+          var badge = '<span class="badge badge-danger">'+cities[i].count+'</span>';
+          $('<tr><td>'+count+'.</td><td>'+cities[i].name+'</td><td>'+progress+'</td><td>'+badge+'</td></tr>').appendTo(locationsTable);
+          if (count == 10) break;
+        }
+        count = 0;
+        var countriesTable = $('#countriesTable');
+        countriesTable.empty();
+        for (var i in countries) {
+          count++;
+          var percentage = (countries[i].count / numMasternodes) * 100;
+          var progress = '<div class="progress"><div class="progress-bar" role="progressbar" style="width: '+percentage+'%" aria-valuenow="'+percentage+'" aria-valuemin="0" aria-valuemax="100"></div></div>';
+          var badge = '<span class="badge badge-danger">'+countries[i].count+'</span>';
+          $('<tr><td>'+count+'.</td><td>'+countries[i].name+'</td><td>'+progress+'</td><td>'+badge+'</td></tr>').appendTo(countriesTable);
+          if (count == 10) break;
+        }
+      }
+    });
+  }
+
+  function updateSupplyChart() {
+    var color = ($('body').hasClass('light_version') ? '#222' : '#ddd');
+    var options = {
+                          chart: {
+                            height: '300px',
+                              type: 'pie',
+                          },
+                          series: [lockedCoins, supply-lockedCoins],
+                          labels: ['Locked', 'Unlocked'],
+                          title: {
+                            text: 'COIN SUPPLY',
+                            floating: true,
+                            style: {
+                              fontSize: '24px',
+                              color: color
+                            }
+                          },
+                          legend: {
+                            show: false,
+                            labels: {
+                              colors: [color,color]
+                            }
+                          },
+                          yaxis: {
+                            labels: {
+                              formatter: function (val, index) {
+                                return (val || '').toLocaleString();
+                              },
+                              style: {
+                                color: color
+                              }
+                            }
+                          }
+
+                      }
+    if (supplyChart) {
+      supplyChart.updateOptions(options, false, true, true);
+    } else {
+      supplyChart = new ApexCharts(document.querySelector("#supplyChart"), options);
+      supplyChart.render();
+    }
+  }
+
+  function updatePage() {
+    updateStats();
+  }
+  function compareValues(key, order='asc') {
+    return function(a, b) {
+      if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+        // property doesn't exist on either object
+        return 0;
+      }
+
+      const varA = (typeof a[key] === 'string') ?
+        a[key].toUpperCase() : a[key];
+      const varB = (typeof b[key] === 'string') ?
+        b[key].toUpperCase() : b[key];
+
+      let comparison = 0;
+      if (varA > varB) {
+        comparison = 1;
+      } else if (varA < varB) {
+        comparison = -1;
+      }
+      return (
+        (order == 'desc') ? (comparison * -1) : comparison
+      );
+    };
+  }
+</script>

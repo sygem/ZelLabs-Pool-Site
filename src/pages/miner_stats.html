@@ -1,0 +1,555 @@
+<script src="/pools/{{=it.coin}}/walletConfig.js"></script>
+
+<style>
+
+#favouriteButton {
+  line-height: 20px;
+  margin-left: 15px;
+  border-radius: 60px;
+  padding: 1px 5px;
+}
+
+#favouriteButton i {
+  font-size: 12px;
+  padding-right: 0;
+}
+
+#hashrateGraph {
+  display: flex;
+  padding: 5px;
+}
+
+#chart, #chartLegendWrapper {
+  min-height: 330px;
+}
+
+#chart.legend-open {
+  flex: 0 0 81%;
+}
+
+#chart.legend-closed {
+  flex: 0 0 100%;
+}
+
+#chartLegend {
+  min-height: 325px;
+  height: 325px;
+}
+
+.card.fullscreen #chart.legend-open {
+  flex: 0 0 90%;
+}
+
+.card.fullscreen #chartLegendWrapper.legend-open {
+  flex: 0 0 10%;
+}
+
+.card.fullscreen #chartLegend {
+  min-height: calc(100vh - 100px);
+  height: calc(100vh - 100px);
+}
+
+#chartLegendWrapper {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#chartLegendWrapper.legend-open {  flex: 0 0 19%;
+}
+#chartLegendWrapper.legend-closed {
+  flex: 0 0 0%;
+  display: none;
+}
+.card.fullscreen .card-body {
+  margin-right: 20px;
+}
+
+#poolTable td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#hashrateStats {
+  padding-bottom: 20px; 
+  min-height: 342px;
+}
+
+#minerHeader {
+  padding-bottom: 0px;
+}
+
+#graphControls {
+  top: -8px;
+}
+
+@media screen and (max-width: 620px) {
+  #minerHeader {
+    padding-bottom: 20px;
+  }
+  #graphControls {
+    top: 20px;
+  }
+
+}
+
+@media screen and (min-width: 1400px) and (max-width: 1600px) {
+  #minerHeader {
+    padding-bottom: 20px;
+  }
+  #graphControls {
+    top: 20px;
+  }
+
+}
+
+</style>
+
+
+<div class="container-fluid" style="display: flex; justify-content: flex-start;">
+  <div class="card card-plain">
+    <div class="row" id="graphAndStats">
+      <div class="col-xxxxl-7 col-xxxl-6 col-xxl-5 col-xl-12 col-sm-12" id="graph">
+        <div class="card" style="margin-top: 15px"> <!-- Hashrate Graph -->
+          <div class="header" id="hashrateGraphCard">
+            <h2 class="card-title" id="minerHeader"><a class="subheader-text text-custom" href="#" id="subHeaderText"></a></h2>
+            <ul class="header-dropdown dropdown" id="graphControls">                                
+              <li class="dropdown">
+                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Graph Functions
+                </a>
+                <ul class="dropdown-menu vivify fadeIn">
+                    <li><a href="javascript:toggleRigSelector();" class="">Toggle Rig Selector</a></li>
+                    <li><a href="javascript:toggleGraphScrollbar();" class="">Toggle Range Selector</a></li>
+                    <li id="insertStatRangesHere"><hr style="border-top: 2px solid;"></li>
+                    <li class="statRange"><a href="#" onclick="recreateChart(86400);return false;">Show Today</a></li>
+                    <li class="statRange"><a href="#" onclick="recreateChart(604800);return false;">Show Last 7 Days</a></li>
+                    <li class="statRange"><a href="#" onclick="recreateChart(1209600);return false;">Show Last 14 Days</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="javascript:toggleGraphFullScreen();" class="full-screen" data-toggle="tooltip" data-title="Full-screen"><i class="zel-icon zel-icon-arrows"></i></a>
+              </li>
+            </ul>
+            <!--<div class="btn-group px-2 dropright">
+              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" data-flip="false" aria-haspopup="true" aria-expanded="false" id=dropdownMenuButton>
+                Select Rig
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="rigSelector">
+              </div>
+            </div>-->
+          </div>
+          <div class="card-body" id="hashrateGraph">
+            <div id="chart">
+            </div>
+            <div id="chartLegendWrapper">
+              <div id="chartLegend"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xxxxl-5 col-xxxl-6 col-xxl-7 col-xl-12 col-sm-12" id="stats"> <!-- Stats -->
+        <div class="row">
+          <div class="col-xxxxl-5 col-xxxl-5 col-xxl-5 col-xl-6 col-lg-5 col-md-6 col-sm-12">
+            <div class="card m-t-15 m-b-10">  <!-- Balance -->
+              <div class="header" id="balanceCard">
+                <h2 class="card-title">Balance</h2>
+              </div>
+              <table class="table table-hover table-custom spacing5 m-t--5 mb-0">
+                  <tbody>
+                      <tr>
+                          <td class="font-weight-bold">Unconfirmed</td>
+                          <td class="text-right text-custom" id="unconfirmedBalance">...<span class="coin"></span></td>
+                      </tr>
+                      <tr>
+                          <td class="font-weight-bold">Unpaid</td>
+                          <td class="text-right text-custom" id="unpaidBalance">...<span class="coin"></span></td>
+                      </tr>
+                      <tr>
+                          <td class="font-weight-bold">Total Paid</td>
+                          <td class="text-right text-custom" id="totalPaid">...<span class="coin"></span></td>
+                      </tr>
+                  </tbody>
+              </table>
+            </div>
+            <div class="row clearfix m-t--5">
+                <div class="col-sm-12 col-md-12">
+                    <div class="card m-b-10">
+                      <div class="body" style="padding: 6px;">
+                        <div class="text-center m-t-5">
+                          <h5 class="remove_solo">Block Contribution</h5>
+                          <h5 class="text-custom remove_solo" id="percentShareText"></h5>
+                          <h5 class="only_solo">Time To Find Block</h5>
+                          <h5 class="text-custom only_solo" id="ttf_miner"></h5>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <div class="card" data-toggle="tooltip" title="To set a custom payout, use a password like 'minpayout=<NUMBER>' in your miner config file.">  <!-- Balance -->
+              <div class="body text-center" style="padding: 6px;">
+                <div class="text-center m-t-5">
+                  <h5 id="minPayoutHeader">Min Payout <span id="minPayoutHeaderCustom" class="d-none">(Custom)</span></h5>
+                  <h4 class="mb-1 text-custom" id="minPayout"></h4>
+                </div>
+              </div>
+              <div class="progress progress-xs" title="" data-delay="500" data-sanitize="false" data-toggle="tooltip" data-html="true" data-placement="bottom" id='customPayoutProgress'>
+                  <div class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xxxxl-7 col-xxxl-7 col-xxl-7 col-xl-6 col-lg-7 col-md-6 col-sm-12">
+            <div class="card" style="margin-top: 15px;"> <!-- Hashrate -->
+              <div class="header">
+                <h2>Statistics</h2>
+              </div>
+              <div class="body" id="hashrateStats">
+                <ul class="nav nav-tabs3" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#hashrateTable" data-toggle="tab" role="tablist" aria-expanded="true">Hashrate</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#networkTable" data-toggle="tab" role="tablist" aria-expanded="false">Network</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#poolTable" data-toggle="tab" role="tablist" aria-expanded="false">Pool</a>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="hashrateTable" aria-expanded="true">
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <td>Current Hash</td>
+                          <td><span id="currentHashrate">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>5m average</td>
+                          <td><span id="5mAvgHashrate">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>1h average</td>
+                          <td><span id="1hAvgHashrate">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>3h average</td>
+                          <td><span id="3hAvgHashrate">-</span></td>
+                        </tr>
+                        <!--<tr>
+                          <td>12h average:</td>
+                          <td><p id="12hAvgHashrate"></p></td>
+                        </tr>-->
+                        <tr>
+                          <td>24h average</td>
+                          <td><span id="24hAvgHashrate">-</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="tab-pane" id="networkTable" aria-expanded="false">
+                    <table class="table stats-table">
+                      <tbody>
+                        <tr>
+                          <td>Hashrate</td>
+                          <td><span id="networkHashrate">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>Network Diff</td>
+                          <td><span id="networkDiff">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>Block Height</td>
+                          <td><span id="networkBlockHeight">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>Block Reward</td>
+                          <td><span id="networkBlockReward">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>Connections</td>
+                          <td><span id="networkConnections">-</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="tab-pane" id="poolTable" aria-expanded="false">
+                    <table class="table stats-table">
+                      <tbody>
+                        <tr>
+                          <td>Hashrate</td>
+                          <td><span id="poolHashrate">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>TTF</td>
+                          <td><span id="poolLuck">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>Current Effort</td>
+                          <td><span id="poolEffort">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>Blocks Found</td>
+                          <td><span id="poolBlocksFound">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>Pool Fee</td>
+                          <td><span id="poolFee">-</span></td>
+                        </tr>
+                        <tr>
+                          <td>Miners / Workers</td>
+                          <td><span id="poolMiners">-</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- END graphAndStats -->
+    <div class="row" id="blocksAndRigs">
+      <div class="col-xxxxl-7 col-xxxl-8 col-xxl-12 col-xl-12 col-sm-12" id="blocks"> <!-- Block Stats -->
+        <div class="card"> <!-- Blocks -->
+          <div class="header">
+            <h2 class="card-title">Latest Blocks</h2>
+            <ul class="header-dropdown dropdown">
+              <li><a href="javascript:void(0);" class="full-screen" data-toggle="tooltip" data-title="Full-screen"><i class="zel-icon zel-icon-arrows"></i></a></li>
+              <li class="dropdown">
+                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                </a>
+                <ul class="dropdown-menu vivify fadeIn">
+                    <li class="remove_solo"><a href="javascript:togglePercentage();">Toggle Block Share</a></li>
+                    <li class="remove_solo"><a href="javascript:toggleReward();">Toggle Reward</a></li>
+                    <li><a href="javascript:toggleEffortLuck();">Toggle Effort/Luck</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="table-responsive" id="blocksStats">
+            <table class="table table-hover table-custom spacing5 display nowrap">
+              <thead>
+                <th>Block</th>
+                <th>Mined</th>
+                <th>Diff</th>
+                <th class="effort">Effort</th>
+                <th class="luck">Luck</th>
+                <th class="percentage remove_solo">Share</th>
+                <th class="reward remove_solo">Reward</th>
+                <th>Confirmations</th>
+                <th></th>
+              </thead>
+              <tbody id="blocksBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-xxxxl-5 col-xxxl-4 col-xxl-12 col-xl-12 col-sm-12" id="rewards"> <!-- Rewards & Rigs -->
+        <div class="row">
+          <div class="col-xxxxl-12 col-xxxl-12 col-xxl-7 col-xl-6 col-lg-6 col-sm-12"> <!-- Rewards -->
+            <div class="card">
+              <div class="body" id="rewardsStats">
+                <ul class="nav nav-tabs3" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#rewardsTable" data-toggle="tab" role="tablist" aria-expanded="true">Rewards</a>
+                  </li>
+                  <li class="nav-item" id="loyaltyItem">
+                    <a class="nav-link" href="#loyaltyTable" data-toggle="tab" role="tablist" aria-expanded="false">Loyalty Program</a>
+                  </li>
+                  <li class="nav-item" id="walletItem">
+                    <a class="nav-link" href="#walletTable" data-toggle="tab" role="tablist" aria-expanded="false">Wallet</a>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="rewardsTable" aria-expanded="true">
+                    <table class="table stats-table">
+                      <thead>
+                        <th>Period</th>
+                        <th id='rewardCoinHeader'></th>
+                        <th>BTC</th>
+                        <th>USD</th>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Last hour</td>
+                          <td id="lastHourCoin">0</td>
+                          <td id="lastHourBTC">0</td>
+                          <td id="lastHourUSD">$0</td>
+                        </tr>
+                        <tr>
+                          <td>Last 12 hours</td>
+                          <td id="last12HourCoin">0</td>
+                          <td id="last12HourBTC">0</td>
+                          <td id="last12HourUSD">$0</td>
+                        </tr>
+                        <tr>
+                          <td>Last 24 hours</td>
+                          <td id="last24HourCoin">0</td>
+                          <td id="last24HourBTC">0</td>
+                          <td id="last24HourUSD">$0</td>
+                        </tr>
+                        <tr>
+                          <td>Today</td>
+                          <td id="todayCoin">0</td>
+                          <td id="todayBTC">0</td>
+                          <td id="todayUSD">$0</td>
+                        </tr>
+                        <tr>
+                          <td>Yesterday</td>
+                          <td id="yesterdayCoin">0</td>
+                          <td id="yesterdayBTC">0</td>
+                          <td id="yesterdayUSD">$0</td>
+                        </tr>
+                        <tr>
+                          <td>Last 7 days</td>
+                          <td id="last7DaysCoin">0</td>
+                          <td id="last7DaysBTC">0</td>
+                          <td id="last7DaysUSD">$0</td>
+                        </tr>
+                        <tr>
+                          <td>Last 30 days</td>
+                          <td id="last30DaysCoin">0</td>
+                          <td id="last30DaysBTC">0</td>
+                          <td id="last30DaysUSD">$0</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="tab-pane" id="loyaltyTable" aria-expanded="true">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <table class="table" style="margin-bottom: 0px;">
+                          <tbody>
+                            <tr id='loyaltyUptimeRow'>
+                              <td id=''>Uptime:</td>
+                              <td id="loyaltyUptime">
+                                <div class="progress progress-xs" data-delay="500" data-sanitize="false" id='loyaltyUptimeBar'>
+                                  <div class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Average Hashrate:</td>
+                              <td id="loyaltyHashrate"></td>
+                            </tr>
+                            <tr>
+                              <td>Estimated Payout:</td>
+                              <td id="loyaltyPayoutAmount"></td>
+                            </tr>
+                            <tr>
+                              <td>Next Payout Date:</td>
+                              <td id="loyaltyPayoutDate"></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-sm-12 col-md-7">
+                        <div id="walletChart"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane" id="walletTable" aria-expanded="true">
+                    <div class="row">
+                      <div class="col-sm-12 col-md-5">
+                        <table class="table" style="margin-bottom: 0px;">
+                          <tbody>
+                            <tr>
+                              <td id='walletBalanceHeader'></td>
+                              <td id="walletBalance">...</td>
+                            </tr>
+                            <tr>
+                              <td>BTC Balance</td>
+                              <td id="walletBTCBalance">...</td>
+                            </tr>
+                            <tr>
+                              <td>USD Balance</td>
+                              <td id="walletUSDBalance">...</td>
+                            </tr>
+                            <tr>
+                              <td>Received</td>
+                              <td id="walletReceived">...</td>
+                            </tr>
+                            <tr>
+                              <td>Sent</td>
+                              <td id="walletSent">...</td>
+                            </tr>
+                            <tr>
+                              <td>Transactions</td>
+                              <td id="walletTransactions">...</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-sm-12 col-md-7">
+                        <div id="walletChart"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xxxxl-12 col-xxxl-12 col-xxl-5 col-xl-6 col-lg-6 col-sm-12" id="rigs"> <!-- rigs -->
+            <div class="card"> <!-- Hashrate -->
+              <div class="header">
+                <h2 class="card-title">Rigs <span class="badge badge-info" id="rigsBadge"></span></h2>
+              </div>
+              <div class="body table-responsive">
+                <table id="rigsTable" class="table table-striped table-no-bordered table-hover" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Name</th>
+                      <th>Hashrate (Now)</th>
+                      <th>Hashrate (Avg)</th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th></th>
+                      <th>Name</th>
+                      <th>Hashrate (Now)</th>
+                      <th>Hashrate (Avg)</th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </tfoot>
+                  <tbody id='rigsBody'>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<script src="/assets/vendor/jquery-knob/jquery.knob.min.js"></script>-->
+<!-- build:js /assets/js/pages/miner_stats.js -->
+<script src="/assets/js/plugins/jquery.dataTables.min.js"></script>
+<script src="/assets/js/plugins/color.js"></script>
+<script src="/assets/js/pages/miner_stats.js"></script>
+<!-- endbuild -->
+
+<!--
+
+  v0.1.0 - initial version
+  v0.1.1 - tidy up graph tooltip
+  v0.2.0 - Updated to use Oculux dashboard
+  v0.2.1 - Fixed the 'live' gathering of current round shares
+  v0.2.2 - 
+  v0.2.3 - Rework the Balance panel, add %age of block reward
+  v0.3.0 - New charting library - amCharts!
+
+--> 
