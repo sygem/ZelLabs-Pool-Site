@@ -665,7 +665,6 @@
         if (networkSols !== -1) {
           updateMinerTTF(networkSols, stats.totalHash)
         } else {
-          log("Setting minerSols to "+stats.totalHash);
           minerSols = stats.totalHash;
         }
 
@@ -1144,18 +1143,52 @@
         dataType: 'json',
         success: function (data) {
           if (data.loyalty) {
-            $('#loyaltyPayoutDate').text(new Date(data.loyalty.nextRun).toLocaleString());
+            var progress = new Date(data.loyalty.nextRun);
+            $('#loyaltyPayoutDate').text(progress.toLocaleString());
+            // how many minutes until the next run?
+            progress = (data.loyalty.nextRun - new Date().getTime()) / (1000*60);
+            // how far through the loyalty cycle are we?
+            progress = (data.loyalty.duration - progress) / data.loyalty.duration;
+            $('#loyaltyPayoutBar .progress-bar').css('width',(progress*100)+'%');
+
+            // duration is specified in minutes
+            var durationDays = (data.loyalty.duration / (60*24));
+            if (durationDays < 1) {
+              var hours = (durationDays*24);
+              $('#loyaltyDuration').text(hours+' Hour'+(hours > 1 ? 's' : ''));
+            } else {
+              $('#loyaltyDuration').text(durationDays+' Day'+(durationDays > 1 ? 's' : ''));
+            }
+
             if (data.miners[address]) {
               $('#loyaltyUptimeBar .progress-bar').css('width',(data.miners[address].uptime*100)+'%');
-              $('#loyaltyUptimeRow').tooltip({title:'Your uptime is '+(data.miners[address].uptime*100).toFixed(2)+'%'});
+              var tooltip = $('#loyaltyUptimeRow');
+              var title = 'Your uptime is '+(data.miners[address].uptime*100).toFixed(2)+'%';
+              $('#loyaltyUptimeRow').tooltip({title:title});
+              tooltip.attr('title',title);
+              tooltip.attr('data-original-title', title);
+              tooltip.tooltip('update');
               if (data.miners[address].uptime < data.config.uptimeTarget) {
                 $('#loyaltyUptimeBar .progress-bar').removeClass('progress-bar-success');
                 $('#loyaltyUptimeBar .progress-bar').addClass('progress-bar-danger');
+              } else {
+                $('#loyaltyUptimeBar .progress-bar').removeClass('progress-bar-danger');
+                $('#loyaltyUptimeBar .progress-bar').addClass('progress-bar-success');
               }
               $('#loyaltyHashrate').text(data.miners[address].hashrateString);
-              $('#loyaltyPayoutAmount').text(data.miners[address].reward+" "+coinTicker);
+              $('#loyaltyPayoutAmount').text(data.miners[address].reward.toFixed(2)+" "+coinTicker.toUpperCase());
+              $('#loyaltyTotalPaid').text(data.miners[address].totalPaid.toFixed(2)+" "+coinTicker.toUpperCase());
             } else {
-
+              $('#loyaltyUptimeBar .progress-bar').css('width','0%');
+              var tooltip = $('#loyaltyUptimeRow');
+              var title = 'No miner details found';
+              $('#loyaltyUptimeRow').tooltip({title:title});
+              tooltip.attr('title',title);
+              tooltip.attr('data-original-title', title);
+              tooltip.tooltip('update');
+              $('#loyaltyHashrate').text(title);
+              $('#loyaltyPayoutAmount').text("0 "+coinTicker.toUpperCase());
+              $('#loyaltyTotalPaid').text("0 "+coinTicker.toUpperCase());
             }
           }
         }
@@ -1182,7 +1215,7 @@
           var miners = pooldata.minerCount;
           var workers = pooldata.workerCount;
           var hashrate = pooldata.hashrateString;
-          luckDays = pooldata.luckDays;
+          luckDays = parseFloat(pooldata.luckDays);
           var validblocks = pooldata.poolStats.validBlocks;
 
           var poolFee = 0;
@@ -1330,7 +1363,7 @@
     var now = new Date();
     var then = new Date(lastBlockTime);
     var secondsSinceLastBlock = (now - then) / 1000;
-    //console.log(now+' '+lastBlockTime+' '+then+' '+secondsSinceLastBlock+' '+luckDays);
+    log("Update poolEffort: "+now+' '+lastBlockTime+' '+then+' '+secondsSinceLastBlock+' '+luckDays);
     $('#poolEffort').text(((secondsSinceLastBlock / (luckDays*24*60*60))*100).toFixed(2)+'%');
   }
 

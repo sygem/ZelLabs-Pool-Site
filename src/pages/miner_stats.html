@@ -420,14 +420,14 @@
                         <table class="table" style="margin-bottom: 0px;">
                           <tbody>
                             <tr id='loyaltyUptimeRow'>
-                              <td id=''>Uptime:</td>
+                              <td id=''>Your Uptime:</td>
                               <td id="loyaltyUptime">
                                 <div class="progress progress-xs" data-delay="500" data-sanitize="false" id='loyaltyUptimeBar'>
                                   <div class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
                                 </div>
                               </td>
                             </tr>
-                            <tr>
+                            <tr id="loyaltyHashrateRow">
                               <td>Average Hashrate:</td>
                               <td id="loyaltyHashrate"></td>
                             </tr>
@@ -436,8 +436,21 @@
                               <td id="loyaltyPayoutAmount"></td>
                             </tr>
                             <tr>
+                              <td>Program Duration:</td>
+                              <td id="loyaltyDuration">14 Days</td>
+                            </tr>
+                            <tr>
                               <td>Next Payout Date:</td>
-                              <td id="loyaltyPayoutDate"></td>
+                              <td>
+                                <div id="loyaltyPayoutDate"></div>
+                                <div class="progress progress-xs" data-delay="500" data-sanitize="false" id='loyaltyPayoutBar'>
+                                  <div class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Total Bonus Paid:</td>
+                              <td id="loyaltyTotalPaid"></td>
                             </tr>
                           </tbody>
                         </table>
